@@ -8,6 +8,7 @@ public class HomeScreen extends World {
 	
 	public HomeScreen(int worldWidth, int worldHeight, int cellSize) {
 		super(WORLDWIDTH, WORLDHEIGHT, cellSize);
+		this.addObject(new Background(), 0, 0);
 	}
 
 }
