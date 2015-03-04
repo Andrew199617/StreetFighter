@@ -8,8 +8,7 @@ public class HomeScreen extends World {
 	
 	public HomeScreen() {
 		super(WORLDWIDTH, WORLDHEIGHT, 1);
-
-		this.addObject(new Background(), WORLDWIDTH/2, WORLDHEIGHT/2);
+		this.addObject(new Background("image/Map_1.png"), WORLDWIDTH/2, WORLDHEIGHT/2);
 	}
 
 }
