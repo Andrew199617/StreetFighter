@@ -12,7 +12,6 @@ public class HomeScreen extends World {
 		super(WORLDWIDTH, WORLDHEIGHT, 1);
 		this.addObject(new Background("image/Map_1.png"), WORLDWIDTH/2, WORLDHEIGHT/2);
 		AddMapChoices();
-		addObject(dino, WORLDWIDTH/10, WORLDHEIGHT-(WORLDHEIGHT/10));
 	}
 
 	private void AddMapChoices() {
