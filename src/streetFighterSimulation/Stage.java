@@ -4,12 +4,17 @@ import greenfoot.World;
 
 public class Stage extends World {
 
+	private static int WORLD_WIDTH;
+	private static int WORLD_HEIGHT;
+
 	Player dino = new Player();
-	
+
 	public Stage(int worldWidth, int worldHeight, int cellSize, MapButton mapButton) {
 		super(worldWidth, worldHeight, cellSize);
 		setBackground(mapButton,worldHeight,worldWidth);
-		addObject(dino, worldWidth/10, worldHeight-(worldHeight/10));
+		WORLD_WIDTH = worldWidth;
+		WORLD_HEIGHT = worldHeight;
+		addObject(dino, WORLD_WIDTH/10, WORLD_HEIGHT-(WORLD_HEIGHT/10));
 	}
 
 	private void setBackground(MapButton mapButton, int worldHeight, int worldWidth) {
@@ -26,7 +31,7 @@ public class Stage extends World {
 		case "image/Temple_Stage.gif":
 			this.addObject(new Background("image/Temple_Stage.gif"),worldWidth/2 , worldHeight/2);
 			break;
-		
+
 		}
 	}
 
