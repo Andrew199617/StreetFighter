@@ -4,10 +4,12 @@ import greenfoot.World;
 
 public class Stage extends World {
 
+	Player dino = new Player();
+	
 	public Stage(int worldWidth, int worldHeight, int cellSize, MapButton mapButton) {
 		super(worldWidth, worldHeight, cellSize);
 		setBackground(mapButton,worldHeight,worldWidth);
-		
+		addObject(dino, worldWidth/10, worldHeight-(worldHeight/10));
 	}
 
 	private void setBackground(MapButton mapButton, int worldHeight, int worldWidth) {
