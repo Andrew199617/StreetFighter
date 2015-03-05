@@ -16,8 +16,5 @@ public class Button extends Actor{
 		this.setImage(box);
 	}
 	
-	public void act(){
-		
-	}
 	
 }
