@@ -18,6 +18,4 @@ public class HomeScreen extends World {
 		this.addObject(new MapButton("image/Forest-1_Stage.gif"), WORLDWIDTH/4, WORLDHEIGHT/4*3);
 		this.addObject(new MapButton("image/Temple_Stage.gif"), WORLDWIDTH/4*3, WORLDHEIGHT/4*3);
 	}
-//alslasmdasf
-	//asfoijri
 }
