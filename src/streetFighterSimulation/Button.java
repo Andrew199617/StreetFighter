@@ -16,5 +16,19 @@ public class Button extends Actor{
 		this.setImage(box);
 	}
 	
+	public Button (String text,int fontsize){
+		
+		Color fontColor = Color.WHITE; 
+        Color bgColor = new Color(0, 0, 0, 0); 
+        GreenfootImage txtImg = new GreenfootImage(""+text+"", fontsize, fontColor, bgColor);
+        // create the base image
+        GreenfootImage img = new GreenfootImage(txtImg.getWidth()+20, txtImg.getHeight()+10);
+        bgColor = Color.BLACK; 
+        img.setColor(bgColor);
+        img.fill();
+        
+        img.drawImage(txtImg, 10, 5);
+        setImage(img);
+	}
 	
 }
