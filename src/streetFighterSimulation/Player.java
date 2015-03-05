@@ -46,7 +46,7 @@ public class Player extends Actor{
 				count--;
 			}else count = WALK_MAX_COUNT;
 		}else {
-			if(count%VARIANT==0 && count < STAND_MAX_COUNT+9){
+			if(count%VARIANT==0 && count < STAND_MAX_COUNT){
 				setImage(dragonStand[count/VARIANT]);
 			}
 			if(count<STAND_MAX_COUNT+(VARIANT-1)){
