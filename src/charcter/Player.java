@@ -42,27 +42,47 @@ public class Player extends Actor{
 		populateCharImg(charType);
 	}
 	public void act(){
-		animate();
+		facePlayer();
 	}
 	protected void facePlayer(){
-		int x;
-		List<Player> players = getObjectsInRange(100, Player.class);
+		List<Player> players = getObjectsInRange(ScaleOfScreen.WIDTH.getNum(), Player.class);
 		
 		for(Player p:players){
-			System.out.println("TEST");
+			int x = p.getX();
+			face = (p.getX()>getX())?
+					Face.LEFT:
+						Face.RIGHT;
+			animate(face);
 		}
 	}
-	protected void animate(){
-		if(Greenfoot.isKeyDown("right")){
-			setLocation(getX()+5, getY());
+	protected void animate(Face f){
+		String[] facing = new String[2];
+		int[] faceSpeed = new int[2];
+		switch(f){
+		case LEFT:
+			facing[0] = "d";
+			facing[1] = "a";
+			faceSpeed[0] = -5;
+			faceSpeed[1] = 3;
+			break;
+		case RIGHT:
+			facing[0] = "left";
+			facing[1] = "right";
+			faceSpeed[0] = 5;
+			faceSpeed[1] = -3;
+			break;
+		}
+		
+		if(Greenfoot.isKeyDown(facing[0])){
+			setLocation(getX() - faceSpeed[0], getY());
 			if(count%VARIANT==0){
 				setImage(charWalk[count/VARIANT]);
 			}
 			if(count<WALK_MAX_COUNT+(VARIANT-1)){
 				count++;
 			}else count = 0;
-		}else if(Greenfoot.isKeyDown("left")){
-			setLocation(getX()-3, getY());
+		}else if(Greenfoot.isKeyDown(facing[1])){
+			setLocation(getX() - faceSpeed[1], getY());
 			if(count%VARIANT==0){
 				setImage(charWalk[count/VARIANT]);
 			}

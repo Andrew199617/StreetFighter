@@ -23,7 +23,6 @@ public class Stage extends World {
 		addObject(dino, WORLD_WIDTH/10, WORLD_HEIGHT-(WORLD_HEIGHT/10));
 		addObject(raptor, WORLD_WIDTH-(WORLD_WIDTH/10), WORLD_HEIGHT-(WORLD_HEIGHT/10));
 	}
-
 	private void setBackground(MapButton mapButton, int worldHeight, int worldWidth) {
 		switch (mapButton.getNameOfMap()){
 		case "image/Dragon_Stage.gif":
