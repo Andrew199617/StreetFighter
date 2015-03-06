@@ -1,10 +1,15 @@
-package streetFighterSimulation;
+package buttons;
 
+import streetFighterSimulation.Stage;
 import greenfoot.Greenfoot;
 
 public class MapButton extends Button {
 
-	String nameOfMap = "";
+	public String getNameOfMap() {
+		return nameOfMap;
+	}
+
+	private String nameOfMap = "";
 	
 	public MapButton(String s) {
 		super(s);

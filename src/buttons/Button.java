@@ -1,4 +1,4 @@
-package streetFighterSimulation;
+package buttons;
 
 import java.awt.Color;
 

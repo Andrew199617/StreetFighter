@@ -1,5 +1,7 @@
 package streetFighterSimulation;
 
+import charcter.Player;
+import buttons.MapButton;
 import greenfoot.World;
 
 public class Stage extends World {
@@ -18,7 +20,7 @@ public class Stage extends World {
 	}
 
 	private void setBackground(MapButton mapButton, int worldHeight, int worldWidth) {
-		switch (mapButton.nameOfMap){
+		switch (mapButton.getNameOfMap()){
 		case "image/Dragon_Stage.gif":
 			this.addObject(new Background("image/Dragon_Stage.gif"),worldWidth/2 , worldHeight/2);
 			break;
