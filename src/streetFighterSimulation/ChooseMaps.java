@@ -1,5 +1,6 @@
 package streetFighterSimulation;
 
+import charcter.Dragon;
 import charcter.Player;
 import buttons.MapButton;
 import enums.ScaleOfScreen;
@@ -7,13 +8,12 @@ import greenfoot.World;
 
 public class ChooseMaps extends World {
 	
-	Dragon dino = new Dragon();
+	Player dino = new Dragon();
 	
 	public ChooseMaps() {
 		super(ScaleOfScreen.WIDTH.getNum(), ScaleOfScreen.HEIGHT.getNum(), 1);
 		this.addObject(new Background("image/Map_1.png"), ScaleOfScreen.WIDTH.getNum()/2, ScaleOfScreen.HEIGHT.getNum()/2);
 		AddMapChoices();
-		addObject(dino, ScaleOfScreen.WIDTH.getNum()/10, ScaleOfScreen.HEIGHT.getNum()-(ScaleOfScreen.HEIGHT.getNum()/10));
 	}
 
 	private void AddMapChoices() {
