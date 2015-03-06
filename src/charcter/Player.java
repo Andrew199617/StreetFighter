@@ -21,7 +21,7 @@ public class Player extends Actor{
 	private GreenfootImage[] raptorStand = new GreenfootImage[Stand.length];
 	private GreenfootImage[] raptorWalk = new GreenfootImage[Walk.length];
 	
-	Player(){
+	public Player(){
 		
 	}
 

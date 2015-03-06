@@ -2,6 +2,7 @@ package streetFighterSimulation;
 
 import greenfoot.Greenfoot;
 import greenfoot.GreenfootImage;
+import charcter.Player;
 
 public class Raptor extends Player{
 
