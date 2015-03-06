@@ -5,7 +5,7 @@ import greenfoot.World;
 
 public class ChooseMaps extends World {
 	
-	Player dino = new Player();
+	Dragon dino = new Dragon();
 	
 	public ChooseMaps() {
 		super(ScaleOfScreen.WIDTH.getNum(), ScaleOfScreen.HEIGHT.getNum(), 1);

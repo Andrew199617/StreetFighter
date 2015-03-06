@@ -7,14 +7,14 @@ public class Stage extends World {
 	private static int WORLD_WIDTH;
 	private static int WORLD_HEIGHT;
 
-	Player dino = new Player();
+	Raptor dino = new Raptor();
 
 	public Stage(int worldWidth, int worldHeight, int cellSize, MapButton mapButton) {
 		super(worldWidth, worldHeight, cellSize);
 		setBackground(mapButton,worldHeight,worldWidth);
 		WORLD_WIDTH = worldWidth;
 		WORLD_HEIGHT = worldHeight;
-		addObject(dino, WORLD_WIDTH/10, WORLD_HEIGHT-(WORLD_HEIGHT/10));
+		addObject(dino, WORLD_WIDTH-(WORLD_WIDTH/10), WORLD_HEIGHT-(WORLD_HEIGHT/10));
 	}
 
 	private void setBackground(MapButton mapButton, int worldHeight, int worldWidth) {
