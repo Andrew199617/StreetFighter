@@ -21,6 +21,7 @@ public class Player extends Actor{
 	protected String[] stand;
 	protected String[] walk;
 
+<<<<<<< HEAD
 	protected GreenfootImage[] charStand;
 	protected GreenfootImage[] charWalk;
 
@@ -42,6 +43,13 @@ public class Player extends Actor{
 	}
 	public void act(){
 		animate();
+=======
+	private GreenfootImage[] raptorStand = new GreenfootImage[Stand.length];
+	private GreenfootImage[] raptorWalk = new GreenfootImage[Walk.length];
+	
+	public Player(){
+		
+>>>>>>> 25c9e25e3cd6366060086e86b50056bbac18c55f
 	}
 	protected void animate(){
 		if(Greenfoot.isKeyDown("right")){
