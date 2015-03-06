@@ -5,15 +5,14 @@ import javax.swing.*;
 public class Swing extends JFrame {
 	
 	
-	public static void main(String[]args){
+/*	public static void main(String[]args){
 		MySwingTry first = new MySwingTry();
 		first.setTitle("First try");
 		first.setSize(300,200);
 		first.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		first.setVisible(true);
 		
-	}
-	
+	}*/
 	
 	JPanel mypanel;
 	JButton mybutton;

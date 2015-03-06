@@ -10,14 +10,12 @@ import greenfoot.World;
 public class ChooseMaps extends World {
 	
 	MapButtonLocation[][] mapButtonLocations = new MapButtonLocation[2][2];
-	Player dino = new Player();
 	
 	public ChooseMaps() {
 		super(ScaleOfScreen.WIDTH.getNum(), ScaleOfScreen.HEIGHT.getNum(), 1);
-		
 		this.addObject(new Background("image/Map_1.png"), ScaleOfScreen.WIDTH.getNum()/2, ScaleOfScreen.HEIGHT.getNum()/2);
+		
 		AddMapChoices();
-		addObject(dino, ScaleOfScreen.WIDTH.getNum()/10, ScaleOfScreen.HEIGHT.getNum()-(ScaleOfScreen.HEIGHT.getNum()/10));
 		playAndStopMusic();
 		
 	}

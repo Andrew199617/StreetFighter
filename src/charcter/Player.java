@@ -1,71 +1,136 @@
 package charcter;
 
+import java.util.List;
+
+import enums.ScaleOfScreen;
 import greenfoot.Actor;
 import greenfoot.Greenfoot;
 import greenfoot.GreenfootImage;
 
 public class Player extends Actor{
 
-	private int count = 0;
+	protected int count = 0;
 
-	private static final int CHAR_WIDTH = 200;
-	private static final int CHAR_HEIGHT = 150;
+	protected static final int CHAR_WIDTH = 200;
+	protected static final int CHAR_HEIGHT = 150;
 
-	private static final int VARIANT = 6;
-	private static final int STAND_MAX_COUNT = VARIANT*5;
-	private static final int WALK_MAX_COUNT = VARIANT*6;
+	protected int standLength;
+	protected int walkLength;
 
-	private String[] Stand = new String[6];
-	private String[] Walk = new String[7];
+	protected static final int VARIANT = 6;
+	protected int STAND_MAX_COUNT;
+	protected int WALK_MAX_COUNT;
 
-	GreenfootImage[] dragonStand = new GreenfootImage[Stand.length];
-	GreenfootImage[] dragonWalk = new GreenfootImage[Walk.length];
+	protected String[] stand;
+	protected String[] walk;
+	protected GreenfootImage[] charStand;
+	protected GreenfootImage[] charWalk;
 
-	public Player(){
-		setImage(dragonStand[count]);
-		populateCharImg();
+	protected enum Face {RIGHT, LEFT};
+	protected enum Character {DRAGON, RAPTOR};
+	protected Face face = Face.RIGHT;
+
+	Player(int stand, int walk, Character charType){
+		standLength = stand;
+		walkLength = walk;
+		STAND_MAX_COUNT = VARIANT*(standLength-1);
+		WALK_MAX_COUNT = VARIANT*(walkLength-1);
+		this.stand = new String[stand];
+		this.walk = new String[walk];
+		charStand = new GreenfootImage[stand];
+		charWalk = new GreenfootImage[walk];
+		populateCharImg(charType);
 	}
 	public void act(){
-		animate();
+		facePlayer();
 	}
-	private void animate(){
-		if(Greenfoot.isKeyDown("right")){
-			setLocation(getX()+5, getY());
+	protected void facePlayer(){
+		List<Player> players = getObjectsInRange(ScaleOfScreen.WIDTH.getNum(), Player.class);
+		
+		for(Player p:players){
+			int x = p.getX();
+			face = (p.getX()>getX())?
+					Face.LEFT:
+						Face.RIGHT;
+			animate(face);
+		}
+	}
+	protected void animate(Face f){
+		String[] facing = new String[2];
+		int[] faceSpeed = new int[2];
+		switch(f){
+		case LEFT:
+			facing[0] = "d";
+			facing[1] = "a";
+			faceSpeed[0] = -5;
+			faceSpeed[1] = 3;
+			break;
+		case RIGHT:
+			facing[0] = "left";
+			facing[1] = "right";
+			faceSpeed[0] = 5;
+			faceSpeed[1] = -3;
+			break;
+		}
+		
+		if(Greenfoot.isKeyDown(facing[0])){
+			setLocation(getX() - faceSpeed[0], getY());
 			if(count%VARIANT==0){
-				setImage(dragonWalk[count/VARIANT]);
+				setImage(charWalk[count/VARIANT]);
 			}
 			if(count<WALK_MAX_COUNT+(VARIANT-1)){
 				count++;
 			}else count = 0;
-		}else if(Greenfoot.isKeyDown("left")){
-			setLocation(getX()-3, getY());
+		}else if(Greenfoot.isKeyDown(facing[1])){
+			setLocation(getX() - faceSpeed[1], getY());
 			if(count%VARIANT==0){
-				setImage(dragonWalk[count/VARIANT]);
+				setImage(charWalk[count/VARIANT]);
 			}
 			if(count>-(VARIANT-1)){
 				count--;
 			}else count = WALK_MAX_COUNT;
 		}else {
 			if(count%VARIANT==0 && count < STAND_MAX_COUNT){
-				setImage(dragonStand[count/VARIANT]);
+				setImage(charStand[count/VARIANT]);
 			}
 			if(count<STAND_MAX_COUNT+(VARIANT-1)){
 				count++;
-			}else count = 0;
+			}else {
+				count = 0;
+			}
+		}
+	}
+	protected void populateCharImg(Character charType){
+		switch(charType){
+		case DRAGON:
+			for(int i = 0; i < standLength; i++){
+				stand[i] = "image/Dragon_Stand-" + i + ".png";
+				charStand[i] = new GreenfootImage(stand[i]);
+				charStand[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
+			}
+			for(int i = 0; i < walkLength; i++){
+				walk[i] = "image/Dragon_Walk-" + i + ".png";
+				charWalk[i] = new GreenfootImage(walk[i]);
+				charWalk[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
+			}
+			break;
+		case RAPTOR:
+			for(int i = 0; i < standLength; i++){
+				stand[i] = "image/Raptor_Stand-" + i + ".png";
+				charStand[i] = new GreenfootImage(stand[i]);
+				charStand[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
+			}
+			for(int i = 0; i < walkLength; i++){
+				walk[i] = "image/Raptor_Walk-" + i + ".png";
+				charWalk[i] = new GreenfootImage(walk[i]);
+				charWalk[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
+			}
+			break;
 		}
 
+
 	}
-	private void populateCharImg(){
-		for(int i = 0; i < Stand.length; i++){
-			Stand[i] = "image/Dragon_Stand-" + i + ".png";
-			dragonStand[i] = new GreenfootImage(Stand[i]);
-			dragonStand[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
-		}
-		for(int i = 0; i < Walk.length; i++){
-			Walk[i] = "image/Dragon_Walk-" + i + ".png";
-			dragonWalk[i] = new GreenfootImage(Walk[i]);
-			dragonWalk[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
-		}
-	}
+
+
 
 }
