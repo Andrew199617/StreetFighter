@@ -20,16 +20,20 @@ public class Stage extends World {
 	public Stage(int worldWidth, int worldHeight, int cellSize, MapButton mapButton) {
 		super(worldWidth, worldHeight, cellSize);
 		setBackground(mapButton,worldHeight,worldWidth);
-		addObject(dino, WORLD_WIDTH/10, WORLD_HEIGHT-(WORLD_HEIGHT/10));
 		
+		createPlayers();
 		playAndStopMusic();
+	}
+
+	private void createPlayers() {
+		addObject(dino, WORLD_WIDTH/10, WORLD_HEIGHT-(WORLD_HEIGHT/10));
+		addObject(raptor, WORLD_WIDTH-(WORLD_WIDTH/10), WORLD_HEIGHT-(WORLD_HEIGHT/10));
 	}
 
 	private void playAndStopMusic() {
 		SoundClips.Choose_Your_Map_SoundCLip.stop();
 		Music.TheCurtainRises.stop();
 		Music.two_Steps_From_Hell.playLoop();
-		addObject(raptor, WORLD_WIDTH-(WORLD_WIDTH/10), WORLD_HEIGHT-(WORLD_HEIGHT/10));
 	}
 	private void setBackground(MapButton mapButton, int worldHeight, int worldWidth) {
 		switch (mapButton.getNameOfMap()){
