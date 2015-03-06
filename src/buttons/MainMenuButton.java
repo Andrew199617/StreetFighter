@@ -1,5 +1,6 @@
-package streetFighterSimulation;
+package buttons;
 
+import streetFighterSimulation.ChooseMaps;
 import greenfoot.Greenfoot;
 
 public class MainMenuButton extends Button {

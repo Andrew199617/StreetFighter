@@ -1,5 +1,7 @@
 package streetFighterSimulation;
 
+import charcter.Player;
+import buttons.MapButton;
 import enums.ScaleOfScreen;
 import greenfoot.World;
 

@@ -1,4 +1,4 @@
-package streetFighterSimulation;
+package charcter;
 
 import greenfoot.Actor;
 import greenfoot.Greenfoot;
