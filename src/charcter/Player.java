@@ -1,5 +1,8 @@
 package charcter;
 
+import java.util.List;
+
+import enums.ScaleOfScreen;
 import greenfoot.Actor;
 import greenfoot.Greenfoot;
 import greenfoot.GreenfootImage;
@@ -37,10 +40,17 @@ public class Player extends Actor{
 		charStand = new GreenfootImage[stand];
 		charWalk = new GreenfootImage[walk];
 		populateCharImg(charType);
-		setImage(charStand[count]);
 	}
 	public void act(){
 		animate();
+	}
+	protected void facePlayer(){
+		int x;
+		List<Player> players = getObjectsInRange(100, Player.class);
+		
+		for(Player p:players){
+			System.out.println("TEST");
+		}
 	}
 	protected void animate(){
 		if(Greenfoot.isKeyDown("right")){
