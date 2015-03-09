@@ -16,20 +16,25 @@ public class Player extends Actor{
 
 	protected int standLength;
 	protected int walkLength;
+	protected int attackLength;
 
 	protected static final int VARIANT = 6;
 	protected int STAND_MAX_COUNT;
-	protected int STAND_MIN_COUNT;
-	protected int WALK_MAX_COUNT = 0;
+	protected int STAND_MIN_COUNT = 0;
+	protected int WALK_MAX_COUNT;
 	protected int WALK_MIN_COUNT = 0;
+	protected int ATTACK_MAX_COUNT;
+	protected int ATTACK_MIN_COUNT = 0;
 
 	public static final int FLOOR = (ScaleOfScreen.HEIGHT.getNum()/2)+ScaleOfScreen.HEIGHT.getNum()/5;
 
 	protected String jumpS;
 	protected String[] stand;
 	protected String[] walk;
+	protected String[] attack;
 	protected GreenfootImage[] charStand;
 	protected GreenfootImage[] charWalk;
+	protected GreenfootImage[] charAttack;
 	protected GreenfootImage[] jumpImg = new GreenfootImage[2];
 
 	protected enum Face {RIGHT, LEFT};
@@ -47,17 +52,21 @@ public class Player extends Actor{
 	protected Actor playerTouch;
 
 	String[] facing = new String[2];
+	String[] actor = new String[2];
 	int[] faceSpeed = new int[2];
 
-	Player(int stand, int walk, String jump, Character charType){
+	Player(int stand, int walk, int attack, String jump, Character charType){
 		jumpS = jump;
+		attackLength = attack;
 		standLength = stand;
 		walkLength = walk;
 		this.charType = charType;
 		STAND_MAX_COUNT = VARIANT*(standLength-1);
 		WALK_MAX_COUNT = VARIANT*(walkLength-1);
+		this.attack = new String[attack*2];
 		this.stand = new String[stand*2];
 		this.walk = new String[walk*2];
+		charAttack = new GreenfootImage[attack*2];
 		charStand = new GreenfootImage[stand*2];
 		charWalk = new GreenfootImage[walk*2];
 		populateCharImg(charType);
@@ -76,7 +85,17 @@ public class Player extends Actor{
 
 	}
 	protected void animate(int i){
-		if(Greenfoot.isKeyDown(facing[0])){
+		if(Greenfoot.isKeyDown(actor[0])){
+			if(count%VARIANT==0 && count<ATTACK_MAX_COUNT){
+				setImage(charAttack[count/VARIANT]);
+				jumped = false;
+			}
+			if(count<ATTACK_MAX_COUNT+(VARIANT-1)){
+				count++;
+			}else {
+				count = ATTACK_MIN_COUNT;
+			}
+		}else if(Greenfoot.isKeyDown(facing[0])){
 			setLocation(getX() + faceSpeed[0], getY());
 			if(Greenfoot.isKeyDown(jumpS)){
 				jump(i);
@@ -86,8 +105,9 @@ public class Player extends Actor{
 			}
 			if(count<WALK_MAX_COUNT+(VARIANT-1)){
 				count++;
-			}else count = WALK_MIN_COUNT;
-
+			}else {
+				count = WALK_MIN_COUNT;
+			}
 			fall();
 		}else if(Greenfoot.isKeyDown(facing[1])){
 			setLocation(getX() + faceSpeed[1], getY());
@@ -146,12 +166,12 @@ public class Player extends Actor{
 	protected int faceThat(Face f, Character c){
 		int forward = 10;
 		int back = 6;
-		int stop = 0;
 		int face = 0;
 		switch(c){
 		case DRAGON:
 			facing[0] = "d";
 			facing[1] = "a";
+			actor[0] ="e";
 			switch(f){
 			case LEFT:
 				faceSpeed[0] = back;
@@ -160,6 +180,8 @@ public class Player extends Actor{
 				WALK_MAX_COUNT = ((walkLength*VARIANT)*2)-1;
 				STAND_MIN_COUNT = (standLength*VARIANT);
 				STAND_MAX_COUNT = ((standLength*VARIANT)*2)-1;
+				ATTACK_MIN_COUNT = (attackLength*VARIANT);
+				ATTACK_MAX_COUNT = ((attackLength*VARIANT)*2)-1;
 				face = 1;
 				break;
 			case RIGHT:
@@ -169,6 +191,8 @@ public class Player extends Actor{
 				WALK_MAX_COUNT = (walkLength*VARIANT)-1;
 				STAND_MIN_COUNT = 0;
 				STAND_MAX_COUNT = (standLength*VARIANT)-1;
+				ATTACK_MIN_COUNT = 0;
+				ATTACK_MAX_COUNT = (attackLength*VARIANT)-1;
 				face = 0;
 				break;
 			}
@@ -176,6 +200,7 @@ public class Player extends Actor{
 		case RAPTOR:
 			facing[0] = "left";
 			facing[1] = "right";
+			actor[0] = "shift";
 			switch(f){
 			case LEFT:
 				faceSpeed[0] = -forward;
@@ -212,6 +237,11 @@ public class Player extends Actor{
 				walk[i] = "image/Dragon_Walk-" + i + ".png";
 				charWalk[i] = new GreenfootImage(walk[i]);
 				charWalk[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
+			}
+			for(int i = 0; i < attackLength*2; i++){
+				attack[i] = "image/Dragon_Claw-" + i + ".png";
+				charAttack[i] = new GreenfootImage(attack[i]);
+				charAttack[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
 			for(int i = 0; i < jumpImg.length; i++){
 				jumpImg[i] = new GreenfootImage("image/Dragon_Jump-" + i + ".png");
