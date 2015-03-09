@@ -26,8 +26,8 @@ public class Stage extends World {
 	}
 
 	private void createPlayers() {
-		addObject(dino, WORLD_WIDTH/10, WORLD_HEIGHT-(WORLD_HEIGHT/10));
-		addObject(raptor, WORLD_WIDTH-(WORLD_WIDTH/10), WORLD_HEIGHT-(WORLD_HEIGHT/10));
+		addObject(dino, WORLD_WIDTH/10, Player.FLOOR);
+		addObject(raptor, WORLD_WIDTH-(WORLD_WIDTH/10), Player.FLOOR);
 	}
 
 	private void playAndStopMusic() {
