@@ -9,6 +9,10 @@ import greenfoot.GreenfootImage;
 
 public class Player extends Actor{
 
+	public void setPlayerRecentlyGotHit(boolean playerRecentlyGotHit) {
+		this.playerRecentlyGotHit = playerRecentlyGotHit;
+	}
+
 	protected int health = 100;
 	protected int count = 0;
 
@@ -39,6 +43,7 @@ public class Player extends Actor{
 	protected GreenfootImage[] jumpImg = new GreenfootImage[2];
 	protected GreenfootImage[] winImg = new GreenfootImage[2];
 	protected GreenfootImage[] lostImg = new GreenfootImage[2];
+	protected GreenfootImage[] hitImg = new GreenfootImage[2];
 
 	protected enum Face {RIGHT, LEFT};
 	protected enum Character {DRAGON, RAPTOR};
@@ -58,6 +63,9 @@ public class Player extends Actor{
 	String[] actor = new String[2];
 	int[] faceSpeed = new int[2];
 	private boolean matchHasntEnded = true;
+	protected boolean playerRecentlyGotHit = false;
+	private int hitTimer = 0;
+
 
 	Player(int stand, int walk, int attack, String jump, Character charType){
 		jumpS = jump;
@@ -76,10 +84,20 @@ public class Player extends Actor{
 		populateCharImg(charType);
 	}
 	public void act(){
-		if(matchHasntEnded){
+		if(matchHasntEnded && !playerRecentlyGotHit){
 			facePlayer();
 		}
+		timeBetweenHits();
 		determineIfMatchHasBeenWon();
+	}
+	private void timeBetweenHits() {
+		if(playerRecentlyGotHit){
+			hitTimer ++;
+			if(hitTimer == 7){
+				hitTimer = 0;
+				playerRecentlyGotHit = false;
+			}
+		}
 	}
 	protected void facePlayer(){
 		List<Player> players = getObjectsInRange(ScaleOfScreen.WIDTH.getNum(), Player.class);
@@ -96,6 +114,7 @@ public class Player extends Actor{
 			if(count%VARIANT==0 && count<ATTACK_MAX_COUNT){
 				setImage(charAttack[count/VARIANT]);
 				jumped = false;
+				hitOtherPlayer();
 			}
 			if(count<ATTACK_MAX_COUNT+(VARIANT-1)){
 				count++;
@@ -262,6 +281,10 @@ public class Player extends Actor{
 				lostImg[i] = new GreenfootImage("image/Dragon_Lost-" + i + ".png");
 				lostImg[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
+			for (int i = 0; i < hitImg .length; i++) {
+				hitImg[i] = new GreenfootImage("image/Dragon_Hit-" + i + ".png");
+				hitImg[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
+			}
 			break;
 		case RAPTOR:
 			for(int i = 0; i < standLength*2; i++){
@@ -286,6 +309,10 @@ public class Player extends Actor{
 				lostImg[i] = new GreenfootImage("image/Raptor_Lost-" + i + ".png");
 				lostImg[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
+			for (int i = 0; i < hitImg .length; i++) {
+				hitImg[i] = new GreenfootImage("image/Raptor_Hit-" + i + ".png");
+				hitImg[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
+			}
 			break;
 		}
 	}
@@ -295,12 +322,22 @@ public class Player extends Actor{
 	protected void goHitOtherPlayer() {
 
 	}
-	protected void gotHit(int dmg){
-		health -= dmg;
-		animateGotHit();
+	protected void hitOtherPlayer(){
+		List<Player> otherPlayer = getIntersectingObjects(Player.class);
+		for (Player otherplayer: otherPlayer) {
+			otherplayer.gotHit(10);
+			otherplayer.setPlayerRecentlyGotHit(true);
+			playerRecentlyGotHit = true;
+		}
 	}
-	protected void animateGotHit() {
-
+	private void gotHit(int dmg) {
+		health -= dmg;
+		if(face == Face.RIGHT){
+			setImage(hitImg[0]);
+		}
+		else{
+			setImage(hitImg[1]);
+		}
 	}
 	protected void lostMatch(){
 		matchHasntEnded = false;
