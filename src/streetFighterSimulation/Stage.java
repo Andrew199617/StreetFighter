@@ -26,10 +26,10 @@ public class Stage extends World {
 		createPlayers();
 		playAndStopMusic();
 		
-		dino.setHealth(DRAGON_HEALTH);
+//		dino.setHealth(DRAGON_HEALTH);
 		dino.healthDisplay(dino.getHealth());
 		
-		raptor.setHealth(RAPTOR_HEALTH);
+//		raptor.setHealth(RAPTOR_HEALTH);
 		raptor.healthDisplay(raptor.getHealth());
 	}
 

@@ -1,13 +1,10 @@
 package charcter;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import interfaces.Player_Status;
 
 public class Dragon extends Player implements Player_Status{
 	
-	public int HP;
 	public Status stat;
 	public Status[] bars;
 	private int x = 30;
@@ -18,22 +15,23 @@ public class Dragon extends Player implements Player_Status{
 	}
 	@Override
 	public void healthDisplay(int health){
-		for(int i = 0; i < health; i++){
+		bars = new Status[health/4];
+		for(int i = 0; i < health/4; i++){
 			stat = new Status();
 			bars[i] = stat;
 			getWorld().addObject(stat, x, y);
 			x += 20;
 		}
-		HP--;
+		health--;
 	}
 	@Override
 	public void setHealth(int health) {
-		HP = health;
-		bars = new Status[HP];
+		this.health = health;
+		bars = new Status[health];
 	}
 	@Override
 	public int getHealth() {
-		return HP;
+		return health;
 	}
 	
 	
