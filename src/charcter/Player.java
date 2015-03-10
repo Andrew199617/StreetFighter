@@ -9,11 +9,11 @@ import greenfoot.Actor;
 import greenfoot.Greenfoot;
 import greenfoot.GreenfootImage;
 
-public class Player extends Actor implements Player_Status{
+public abstract class Player extends Actor implements Player_Status{
 
 	private static final int HIT_DELAY = 50;
 
-	protected int health = 100;
+	protected int health = 25;
 	protected int count = 0;
 
 	protected static final int CHAR_WIDTH = 200;
@@ -62,7 +62,7 @@ public class Player extends Actor implements Player_Status{
 	String[] facing = new String[2];
 	String[] actor = new String[2];
 	int[] faceSpeed = new int[2];
-	private boolean matchHasntEnded = true;
+	protected boolean matchHasntEnded = true;
 	protected boolean playerRecentlyGotHit = false;
 	private int hitTimer = 0;
 
@@ -82,15 +82,15 @@ public class Player extends Actor implements Player_Status{
 		charStand = new GreenfootImage[stand*2];
 		charWalk = new GreenfootImage[walk*2];
 		populateCharImg(charType);
-	}
+	}/*
 	public void act(){
 		if(matchHasntEnded){
 			facePlayer();
 		}
 		timeBetweenHits();
 		determineIfMatchHasBeenWon();
-	}
-	private void timeBetweenHits() {
+	}//*/
+	protected void timeBetweenHits() {
 		if(playerRecentlyGotHit){
 			hitTimer ++;
 			if(hitTimer == HIT_DELAY){
@@ -329,20 +329,12 @@ public class Player extends Actor implements Player_Status{
 	protected void hitOtherPlayer(){
 		List<Player> otherPlayer = getIntersectingObjects(Player.class);
 		for (Player otherplayer: otherPlayer) {
-			otherplayer.gotHit(10);
+			otherplayer.gotHit(1);
 			otherplayer.setPlayerRecentlyGotHit(true);
 			//playerRecentlyGotHit = true;
 		}
 	}
-	private void gotHit(int dmg) {
-		health -= dmg;
-		if(face == Face.RIGHT){
-			setImage(hitImg[0]);
-		}
-		else{
-			setImage(hitImg[1]);
-		}
-	}
+	protected abstract void gotHit(int dmg);
 	protected void lostMatch(){
 		matchHasntEnded = false;
 		if(face == Face.RIGHT){

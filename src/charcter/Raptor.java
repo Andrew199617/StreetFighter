@@ -1,5 +1,6 @@
 package charcter;
 
+import charcter.Player.Face;
 import enums.ScaleOfScreen;
 import interfaces.Player_Status;
 import greenfoot.Greenfoot;
@@ -15,10 +16,30 @@ public class Raptor extends Player implements Player_Status{
 	public Raptor(){
 		super (6, 8, 0, "up", Character.RAPTOR);
 	}
+	public void act(){
+		if(matchHasntEnded){
+			facePlayer();
+		}
+		timeBetweenHits();
+		determineIfMatchHasBeenWon();
+	}
+	protected void gotHit(int dmg) {
+		for(int i = 0; i < dmg;i++){
+		getWorld().removeObject(bars[health-1]);
+		health --;
+		}
+		
+		if(face == Face.RIGHT){
+			setImage(hitImg[0]);
+		}
+		else{
+			setImage(hitImg[1]);
+		}
+	}
 	@Override
 	public void healthDisplay(int health){ 
-		this.bars = new Status[health/4];
-		for(int i = 0; i < health/4; i++){
+		this.bars = new Status[health];
+		for(int i = 0; i < health; i++){
 			stat = new Status();
 			bars[i] = stat;
 			getWorld().addObject(stat, x, y);
