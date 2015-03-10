@@ -2,9 +2,7 @@ package streetFighterSimulation;
 
 import sounds.Music;
 import sounds.SoundClips;
-import charcter.Dragon;
-import charcter.Player;
-import charcter.Raptor;
+import charcter.*;
 import enums.ScaleOfScreen;
 import buttons.MapButton;
 import greenfoot.World;
@@ -16,11 +14,12 @@ public class Stage extends World {
 
 	Player dino = new Dragon();
 	Player raptor = new Raptor();
+	Status stat = new Status();
 
 	public Stage(int worldWidth, int worldHeight, int cellSize, MapButton mapButton) {
 		super(worldWidth, worldHeight, cellSize);
 		setBackground(mapButton,worldHeight,worldWidth);
-		
+		addStats();
 		createPlayers();
 		playAndStopMusic();
 	}
@@ -29,7 +28,9 @@ public class Stage extends World {
 		addObject(dino, WORLD_WIDTH/10, Player.FLOOR);
 		addObject(raptor, WORLD_WIDTH-(WORLD_WIDTH/10), Player.FLOOR);
 	}
-
+	private void addStats(){
+		addObject(stat, 30, 30);
+	}
 	private void playAndStopMusic() {
 		SoundClips.Choose_Your_Map_SoundCLip.stop();
 		Music.TheCurtainRises.stop();
