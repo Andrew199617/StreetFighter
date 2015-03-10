@@ -7,17 +7,14 @@ import interfaces.Player_Status;
 
 public class Dragon extends Player implements Player_Status{
 	
-	private int HP;
-	private Status stat;
-	private Status[] bars;
+	public int HP;
+	public Status stat;
+	public Status[] bars;
 	private int x = 30;
 	private int y = 30;
 	
 	public Dragon(){
 		super (6, 8, 7, "w", Character.DRAGON);
-	}
-	public void act(){
-		
 	}
 	@Override
 	public void healthDisplay(int health){

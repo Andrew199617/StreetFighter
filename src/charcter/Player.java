@@ -11,9 +11,7 @@ import greenfoot.GreenfootImage;
 
 public class Player extends Actor implements Player_Status{
 
-	public void setPlayerRecentlyGotHit(boolean playerRecentlyGotHit) {
-		this.playerRecentlyGotHit = playerRecentlyGotHit;
-	}
+	private static final int HIT_DELAY = 50;
 
 	protected int health = 100;
 	protected int count = 0;
@@ -86,7 +84,7 @@ public class Player extends Actor implements Player_Status{
 		populateCharImg(charType);
 	}
 	public void act(){
-		if(matchHasntEnded && !playerRecentlyGotHit){
+		if(matchHasntEnded){
 			facePlayer();
 		}
 		timeBetweenHits();
@@ -95,7 +93,7 @@ public class Player extends Actor implements Player_Status{
 	private void timeBetweenHits() {
 		if(playerRecentlyGotHit){
 			hitTimer ++;
-			if(hitTimer == 7){
+			if(hitTimer == HIT_DELAY){
 				hitTimer = 0;
 				playerRecentlyGotHit = false;
 			}
@@ -117,6 +115,7 @@ public class Player extends Actor implements Player_Status{
 				setImage(charAttack[count/VARIANT]);
 				jumped = false;
 				hitOtherPlayer();
+				
 			}
 			if(count<ATTACK_MAX_COUNT+(VARIANT-1)){
 				count++;
@@ -318,6 +317,9 @@ public class Player extends Actor implements Player_Status{
 			break;
 		}
 	}
+	public void setPlayerRecentlyGotHit(boolean playerRecentlyGotHit) {
+		this.playerRecentlyGotHit = playerRecentlyGotHit;
+	}
 	protected void fight(){
 		goHitOtherPlayer();
 	}
@@ -329,7 +331,7 @@ public class Player extends Actor implements Player_Status{
 		for (Player otherplayer: otherPlayer) {
 			otherplayer.gotHit(10);
 			otherplayer.setPlayerRecentlyGotHit(true);
-			playerRecentlyGotHit = true;
+			//playerRecentlyGotHit = true;
 		}
 	}
 	private void gotHit(int dmg) {

@@ -7,9 +7,9 @@ import greenfoot.GreenfootImage;
 
 public class Raptor extends Player implements Player_Status{
 	
-	private int HP;
-	private Status stat;
-	private Status[] bars;
+	public int HP;
+	public Status stat;
+	public Status[] bars;
 	private int x = ScaleOfScreen.WIDTH.getNum()-30;
 	private int y = 30;
 
