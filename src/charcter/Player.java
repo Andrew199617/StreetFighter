@@ -1,5 +1,7 @@
 package charcter;
 
+import interfaces.Player_Status;
+
 import java.util.List;
 
 import enums.ScaleOfScreen;
@@ -7,7 +9,7 @@ import greenfoot.Actor;
 import greenfoot.Greenfoot;
 import greenfoot.GreenfootImage;
 
-public class Player extends Actor{
+public class Player extends Actor implements Player_Status{
 
 	public void setPlayerRecentlyGotHit(boolean playerRecentlyGotHit) {
 		this.playerRecentlyGotHit = playerRecentlyGotHit;
@@ -372,5 +374,20 @@ public class Player extends Actor{
 		else {
 			setImage(winImg[1]);
 		}
+	}
+	@Override
+	public void healthDisplay(int i) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void setHealth(int i) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public int getHealth() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
