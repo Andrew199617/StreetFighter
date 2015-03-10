@@ -36,6 +36,7 @@ public class Stage extends World {
 		Music.TheCurtainRises.stop();
 		Music.two_Steps_From_Hell.playLoop();
 	}
+	
 	private void setBackground(MapButton mapButton, int worldHeight, int worldWidth) {
 		switch (mapButton.getNameOfMap()){
 		case "image/Dragon_Stage.gif":
