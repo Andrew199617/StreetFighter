@@ -15,21 +15,27 @@ public class Stage extends World {
 	Player dino = new Dragon();
 	Player raptor = new Raptor();
 	Status stat = new Status();
+	
+	private static final int DRAGON_HEALTH = 25;
+	private static final int RAPTOR_HEALTH = 25;
 
 	public Stage(int worldWidth, int worldHeight, int cellSize, MapButton mapButton) {
 		super(worldWidth, worldHeight, cellSize);
 		setBackground(mapButton,worldHeight,worldWidth);
-		addStats();
+		
 		createPlayers();
 		playAndStopMusic();
+		
+		dino.setHealth(DRAGON_HEALTH);
+		dino.healthDisplay(dino.getHealth());
+		
+		raptor.setHealth(RAPTOR_HEALTH);
+		raptor.healthDisplay(raptor.getHealth());
 	}
 
 	private void createPlayers() {
 		addObject(dino, WORLD_WIDTH/10, Player.FLOOR);
 		addObject(raptor, WORLD_WIDTH-(WORLD_WIDTH/10), Player.FLOOR);
-	}
-	private void addStats(){
-		addObject(stat, 30, 30);
 	}
 	private void playAndStopMusic() {
 		SoundClips.Choose_Your_Map_SoundCLip.stop();
