@@ -24,7 +24,6 @@ public class Raptor extends Player implements Player_Status{
 		determineIfMatchHasBeenWon();
 	}
 	protected void gotHit(int dmg) {
-		System.out.println("HIT");
 			playerRecentlyGotHit = false;
 			for(int i = 0; i < dmg;i++){
 				getWorld().removeObject(bars[health-1]);

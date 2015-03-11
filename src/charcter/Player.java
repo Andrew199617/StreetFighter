@@ -24,7 +24,7 @@ public abstract class Player extends Actor implements Player_Status{
 	protected int walkLength;
 	protected int attackLength;
 
-	protected static final int VARIANT = 6;
+	protected static final int VARIANT = 5;
 	protected int STAND_MAX_COUNT;
 	protected int STAND_MIN_COUNT = 0;
 	protected int WALK_MAX_COUNT;
