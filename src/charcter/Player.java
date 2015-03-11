@@ -95,7 +95,7 @@ public abstract class Player extends Actor implements Player_Status{
 		timeBetweenHits();
 		determineIfMatchHasBeenWon();
 	}//*/
-	/*
+	/*public void timeBetweenHits(){
 		if(playerRecentlyGotHit){
 			hitTimer ++;
 			if(hitTimer > HIT_DELAY){
