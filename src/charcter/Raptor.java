@@ -31,7 +31,6 @@ public class Raptor extends Player implements Player_Status{
 		health = i;
 		bars = new Status[health];
 	}
-
 	@Override
 	public int getHealth() {
 		return health;
