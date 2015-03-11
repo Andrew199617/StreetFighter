@@ -20,18 +20,17 @@ public class Raptor extends Player implements Player_Status{
 		if(matchHasntEnded){
 			facePlayer();
 		}
-		timeBetweenHits();
+		//timeBetweenHits();
 		determineIfMatchHasBeenWon();
 	}
 	protected void gotHit(int dmg) {
-		if(playerRecentlyGotHit && readyHit){
+		System.out.println("HIT");
 			playerRecentlyGotHit = false;
 			for(int i = 0; i < dmg;i++){
 				getWorld().removeObject(bars[health-1]);
 				health --;
 				lostHP = true;
 			}
-		}
 	}
 	@Override
 	public void healthDisplay(int health){ 
