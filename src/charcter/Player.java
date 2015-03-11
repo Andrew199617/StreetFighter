@@ -11,7 +11,8 @@ import greenfoot.GreenfootImage;
 
 public abstract class Player extends Actor implements Player_Status{
 
-	private static final int HIT_DELAY = 50;
+	protected static final int HIT_DELAY = 40;
+	protected static final int HIT_ANIMATE = 10;
 
 	protected int health = 25;
 	protected int count = 0;
@@ -64,7 +65,9 @@ public abstract class Player extends Actor implements Player_Status{
 	int[] faceSpeed = new int[2];
 	protected boolean matchHasntEnded = true;
 	protected boolean playerRecentlyGotHit = false;
-	private int hitTimer = 0;
+	protected boolean readyHit = true;
+	protected boolean lostHP = false;
+	protected int hitTimer = 0;
 
 
 	Player(int stand, int walk, int attack, String jump, Character charType){
@@ -82,7 +85,8 @@ public abstract class Player extends Actor implements Player_Status{
 		charStand = new GreenfootImage[stand*2];
 		charWalk = new GreenfootImage[walk*2];
 		populateCharImg(charType);
-	}/*
+	}
+	/*
 	public void act(){
 		if(matchHasntEnded){
 			facePlayer();
@@ -93,9 +97,9 @@ public abstract class Player extends Actor implements Player_Status{
 	protected void timeBetweenHits() {
 		if(playerRecentlyGotHit){
 			hitTimer ++;
-			if(hitTimer == HIT_DELAY){
+			if(hitTimer > HIT_DELAY){
 				hitTimer = 0;
-				playerRecentlyGotHit = false;
+				readyHit = true;
 			}
 		}
 	}
@@ -105,17 +109,32 @@ public abstract class Player extends Actor implements Player_Status{
 			face = (p.getX()<=getX())?
 					Face.LEFT:
 						Face.RIGHT;
-			animate(faceThat(face, charType));
+			animatePlayer(faceThat(face, charType));
 		}
 
 	}
-	protected void animate(int i){
-		if(Greenfoot.isKeyDown(actor[0])){
+	protected void animatePlayer(int i){
+		if(lostHP){
+			animate++;
+			if(animate<HIT_ANIMATE){
+				if(face == Face.RIGHT){
+					setImage(hitImg[0]);
+				}
+				else{
+					setImage(hitImg[1]);
+				}
+				
+			}else{
+				animate = 0;
+				lostHP = false;
+			}
+		}else if(Greenfoot.isKeyDown(actor[0])){
 			if(count%VARIANT==0 && count<ATTACK_MAX_COUNT){
 				setImage(charAttack[count/VARIANT]);
 				jumped = false;
-				hitOtherPlayer();
-				
+				if(count/VARIANT == 0){
+					hitOtherPlayer();
+				}
 			}
 			if(count<ATTACK_MAX_COUNT+(VARIANT-1)){
 				count++;
@@ -319,7 +338,8 @@ public abstract class Player extends Actor implements Player_Status{
 	}
 	public void setPlayerRecentlyGotHit(boolean playerRecentlyGotHit) {
 		this.playerRecentlyGotHit = playerRecentlyGotHit;
-	}
+		readyHit = false;
+	}//*/
 	protected void fight(){
 		goHitOtherPlayer();
 	}
@@ -331,10 +351,10 @@ public abstract class Player extends Actor implements Player_Status{
 		for (Player otherplayer: otherPlayer) {
 			otherplayer.gotHit(1);
 			otherplayer.setPlayerRecentlyGotHit(true);
-			//playerRecentlyGotHit = true;
 		}
 	}
 	protected abstract void gotHit(int dmg);
+	
 	protected void lostMatch(){
 		matchHasntEnded = false;
 		if(face == Face.RIGHT){

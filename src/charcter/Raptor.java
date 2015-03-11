@@ -7,7 +7,7 @@ import greenfoot.Greenfoot;
 import greenfoot.GreenfootImage;
 
 public class Raptor extends Player implements Player_Status{
-	
+
 	public Status stat;
 	public Status[] bars;
 	private int x = ScaleOfScreen.WIDTH.getNum()-30;
@@ -24,16 +24,13 @@ public class Raptor extends Player implements Player_Status{
 		determineIfMatchHasBeenWon();
 	}
 	protected void gotHit(int dmg) {
-		for(int i = 0; i < dmg;i++){
-		getWorld().removeObject(bars[health-1]);
-		health --;
-		}
-		
-		if(face == Face.RIGHT){
-			setImage(hitImg[0]);
-		}
-		else{
-			setImage(hitImg[1]);
+		if(playerRecentlyGotHit && readyHit){
+			playerRecentlyGotHit = false;
+			for(int i = 0; i < dmg;i++){
+				getWorld().removeObject(bars[health-1]);
+				health --;
+				lostHP = true;
+			}
 		}
 	}
 	@Override
