@@ -69,6 +69,8 @@ public abstract class Player extends Actor implements Player_Status{
 	protected boolean lostHP = false;
 	protected boolean fightAnimate = false;
 	protected int hitTimer = 0;
+	private boolean moveRight = false;
+	private boolean moveLeft = false;
 
 
 	Player(int stand, int walk, int attack, String jump, Character charType){
@@ -113,7 +115,7 @@ public abstract class Player extends Actor implements Player_Status{
 				lostHP = false;
 			}
 		}else if(fightAnimate){
-			
+
 			if(count%VARIANT==0 && count<ATTACK_MAX_COUNT){
 				setImage(charAttack[count/VARIANT]);
 				jumped = false;
@@ -130,7 +132,7 @@ public abstract class Player extends Actor implements Player_Status{
 			if(Greenfoot.isKeyDown(actor[0])){
 				fightAnimate = true;
 				count = ATTACK_MIN_COUNT;
-			}else if(Greenfoot.isKeyDown(facing[0])){
+			}else if(Greenfoot.isKeyDown(facing[0]) || moveRight){
 				setLocation(getX() + faceSpeed[0], getY());
 				if(Greenfoot.isKeyDown(jumpS)){
 					jump(i);
@@ -144,7 +146,7 @@ public abstract class Player extends Actor implements Player_Status{
 					count = WALK_MIN_COUNT;
 				}
 				fall();
-			}else if(Greenfoot.isKeyDown(facing[1])){
+			}else if(Greenfoot.isKeyDown(facing[1]) || moveLeft){
 				setLocation(getX() + faceSpeed[1], getY());
 				if(Greenfoot.isKeyDown(jumpS)){
 					jump(i);
@@ -330,57 +332,57 @@ public abstract class Player extends Actor implements Player_Status{
 		this.playerRecentlyGotHit = playerRecentlyGotHit;
 		readyHit = false;
 	}//*/
-	protected void fight(){
-		goHitOtherPlayer();
-	}
-	protected void goHitOtherPlayer() {
-		List<Player> otherPlayer = getObjectsInRange(ScaleOfScreen.WIDTH.getNum(), Player.class);
-		for(Player op: otherPlayer){
-			if(op.getX() + CHAR_WIDTH/2 > getX() && op.getX() - CHAR_WIDTH/2 < getX()){
-				attackAnimation();
-			}
-			else if(op.getX()+CHAR_WIDTH/2 > getX() && op.getX()-CHAR_WIDTH/2 > getX()){
-				setLocation(getX() + faceSpeed[0], getY());
-				if(count%VARIANT==0 && count<WALK_MAX_COUNT){
-					setImage(charWalk[count/VARIANT]);
-					jumped = false;
-				}
-				if(count<WALK_MAX_COUNT+(VARIANT-1)){
-					count++;
-				}else {
-					count = WALK_MIN_COUNT;
-				}
-			}
-			else{
-				faceThat(Face.LEFT, charType);
-				setLocation(getX() + faceSpeed[1], getY());
-				if(count%VARIANT==0 && count<WALK_MAX_COUNT){
-					setImage(charWalk[count/VARIANT]);
-					jumped = false;
-				}
-				if(count<WALK_MAX_COUNT+(VARIANT-1)){
-					count++;
-				}else {
-					count = WALK_MIN_COUNT;
-				}
-			}
-		}
-	}
 
-	private void attackAnimation() {
-		if(count%VARIANT==0 && count<ATTACK_MAX_COUNT){
-			setImage(charAttack[count/VARIANT]);
-			jumped = false;
-			if(count/VARIANT == 0){
-				hitOtherPlayer();
-			}
+	protected void fight(){
+		List<Player> otherPlayer = getObjectsInRange(ScaleOfScreen.WIDTH.getNum(), Player.class);
+		moveRight = false;
+		moveLeft = false;
+		
+		if(closeEnoughToHitOtherPlayer(otherPlayer)){
+			hitOtherPlayer(otherPlayer);
 		}
-		if(count<ATTACK_MAX_COUNT+(VARIANT-1)){
-			count++;
-		}else {
-			count = ATTACK_MIN_COUNT;
+		
+		else if(notCloseEnoughToHitOtherPlayerOnLeftSide(otherPlayer)){
+			moveTowardsOtherPlayerFromLeft();
 		}
+		
+		else if(notCloseEnoughToHitOtherPlayerOnRightSide(otherPlayer)){
+			moveTowardsOtherPlayerFromRight();
+		}
+		
 	}
+	
+	private boolean notCloseEnoughToHitOtherPlayerOnRightSide(List<Player> otherPlayer) {
+		boolean result = false;
+		for(Player op: otherPlayer){
+			result = op.getX() + CHAR_WIDTH/2 <= getX() && face == Face.LEFT;
+		}
+		return result;
+	}
+	private void moveTowardsOtherPlayerFromRight() {
+		moveLeft = true;
+	}
+	private void moveTowardsOtherPlayerFromLeft() {
+		moveRight = true;	
+	}
+	private boolean notCloseEnoughToHitOtherPlayerOnLeftSide(List<Player> otherPlayer) {
+		boolean result = false;
+		for(Player op: otherPlayer){
+			result = op.getX() - CHAR_WIDTH/2 >= getX() && face == Face.RIGHT;
+		}
+		return result;
+	}
+	private boolean closeEnoughToHitOtherPlayer(List<Player> otherPlayer) {
+		boolean result = false;
+		for(Player op: otherPlayer){
+			result = op.getX() + CHAR_WIDTH/2 >= getX() && op.getX() - CHAR_WIDTH/2 <= getX();
+		}
+		return result;
+	}
+	protected void hitOtherPlayer(List<Player> otherPlayer) {
+		fightAnimate = true;
+	}
+	
 	protected void hitOtherPlayer(){
 		List<Player> otherPlayer = getIntersectingObjects(Player.class);
 		for (Player otherplayer: otherPlayer) {

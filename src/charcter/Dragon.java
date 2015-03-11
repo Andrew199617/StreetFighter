@@ -20,7 +20,7 @@ public class Dragon extends Player implements Player_Status{
 		}
 		//timeBetweenHits();
 		determineIfMatchHasBeenWon();
-		goHitOtherPlayer();
+		fight();
 	}
 	@Override
 	public void healthDisplay(int health){
