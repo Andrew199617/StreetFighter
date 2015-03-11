@@ -86,14 +86,7 @@ public abstract class Player extends Actor implements Player_Status{
 		charWalk = new GreenfootImage[walk*2];
 		populateCharImg(charType);
 	}
-	/*
-	public void act(){
-		if(matchHasntEnded){
-			facePlayer();
-		}
-		timeBetweenHits();
-		determineIfMatchHasBeenWon();
-	}//*/
+	
 	protected void timeBetweenHits() {
 		if(playerRecentlyGotHit){
 			hitTimer ++;
@@ -129,18 +122,7 @@ public abstract class Player extends Actor implements Player_Status{
 				lostHP = false;
 			}
 		}else if(Greenfoot.isKeyDown(actor[0])){
-			if(count%VARIANT==0 && count<ATTACK_MAX_COUNT){
-				setImage(charAttack[count/VARIANT]);
-				jumped = false;
-				if(count/VARIANT == 0){
-					hitOtherPlayer();
-				}
-			}
-			if(count<ATTACK_MAX_COUNT+(VARIANT-1)){
-				count++;
-			}else {
-				count = ATTACK_MIN_COUNT;
-			}
+			attackAnimation();
 		}else if(Greenfoot.isKeyDown(facing[0])){
 			setLocation(getX() + faceSpeed[0], getY());
 			if(Greenfoot.isKeyDown(jumpS)){
@@ -344,7 +326,52 @@ public abstract class Player extends Actor implements Player_Status{
 		goHitOtherPlayer();
 	}
 	protected void goHitOtherPlayer() {
+		List<Player> otherPlayer = getObjectsInRange(ScaleOfScreen.WIDTH.getNum(), Player.class);
+		for(Player op: otherPlayer){
+			if(op.getX() + CHAR_WIDTH/2 > getX() && op.getX() - CHAR_WIDTH/2 < getX()){
+				attackAnimation();
+			}
+			else if(op.getX()+CHAR_WIDTH/2 > getX() && op.getX()-CHAR_WIDTH/2 > getX()){
+				setLocation(getX() + faceSpeed[0], getY());
+				if(count%VARIANT==0 && count<WALK_MAX_COUNT){
+					setImage(charWalk[count/VARIANT]);
+					jumped = false;
+				}
+				if(count<WALK_MAX_COUNT+(VARIANT-1)){
+					count++;
+				}else {
+					count = WALK_MIN_COUNT;
+				}
+			}
+			else{
+				faceThat(Face.LEFT, charType);
+				setLocation(getX() + faceSpeed[1], getY());
+				if(count%VARIANT==0 && count<WALK_MAX_COUNT){
+					setImage(charWalk[count/VARIANT]);
+					jumped = false;
+				}
+				if(count<WALK_MAX_COUNT+(VARIANT-1)){
+					count++;
+				}else {
+					count = WALK_MIN_COUNT;
+				}
+			}
+		}
+	}
 
+	private void attackAnimation() {
+		if(count%VARIANT==0 && count<ATTACK_MAX_COUNT){
+			setImage(charAttack[count/VARIANT]);
+			jumped = false;
+			if(count/VARIANT == 0){
+				hitOtherPlayer();
+			}
+		}
+		if(count<ATTACK_MAX_COUNT+(VARIANT-1)){
+			count++;
+		}else {
+			count = ATTACK_MIN_COUNT;
+		}
 	}
 	protected void hitOtherPlayer(){
 		List<Player> otherPlayer = getIntersectingObjects(Player.class);
