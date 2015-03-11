@@ -1,6 +1,7 @@
 package charcter;
 
 
+import charcter.Player.Face;
 import interfaces.Player_Status;
 
 public class Dragon extends Player implements Player_Status{
@@ -13,10 +14,17 @@ public class Dragon extends Player implements Player_Status{
 	public Dragon(){
 		super (6, 8, 7, "w", Character.DRAGON);
 	}
+	public void act(){
+		if(matchHasntEnded){
+			facePlayer();
+		}
+		timeBetweenHits();
+		determineIfMatchHasBeenWon();
+	}
 	@Override
 	public void healthDisplay(int health){
-		bars = new Status[health/4];
-		for(int i = 0; i < health/4; i++){
+		bars = new Status[health];
+		for(int i = 0; i < health; i++){
 			stat = new Status();
 			bars[i] = stat;
 			getWorld().addObject(stat, x, y);
@@ -32,6 +40,15 @@ public class Dragon extends Player implements Player_Status{
 	@Override
 	public int getHealth() {
 		return health;
+	}
+	protected void gotHit(int dmg) {
+		health -= dmg;
+		if(face == Face.RIGHT){
+			setImage(hitImg[0]);
+		}
+		else{
+			setImage(hitImg[1]);
+		}
 	}
 	
 	
