@@ -24,7 +24,7 @@ public abstract class Player extends Actor implements Player_Status{
 	protected int walkLength;
 	protected int attackLength;
 
-	protected static final int VARIANT = 6;
+	protected static final int VARIANT = 5;
 	protected int STAND_MAX_COUNT;
 	protected int STAND_MIN_COUNT = 0;
 	protected int WALK_MAX_COUNT;
@@ -67,6 +67,7 @@ public abstract class Player extends Actor implements Player_Status{
 	protected boolean playerRecentlyGotHit = false;
 	protected boolean readyHit = true;
 	protected boolean lostHP = false;
+	protected boolean fightAnimate = false;
 	protected int hitTimer = 0;
 
 
@@ -85,16 +86,6 @@ public abstract class Player extends Actor implements Player_Status{
 		charStand = new GreenfootImage[stand*2];
 		charWalk = new GreenfootImage[walk*2];
 		populateCharImg(charType);
-	}
-	
-	protected void timeBetweenHits() {
-		if(playerRecentlyGotHit){
-			hitTimer ++;
-			if(hitTimer > HIT_DELAY){
-				hitTimer = 0;
-				readyHit = true;
-			}
-		}
 	}
 	protected void facePlayer(){
 		List<Player> players = getObjectsInRange(ScaleOfScreen.WIDTH.getNum(), Player.class);
@@ -116,53 +107,70 @@ public abstract class Player extends Actor implements Player_Status{
 				else{
 					setImage(hitImg[1]);
 				}
-				
+
 			}else{
 				animate = 0;
 				lostHP = false;
 			}
-		}else if(Greenfoot.isKeyDown(actor[0])){
-			attackAnimation();
-		}else if(Greenfoot.isKeyDown(facing[0])){
-			setLocation(getX() + faceSpeed[0], getY());
-			if(Greenfoot.isKeyDown(jumpS)){
-				jump(i);
-			}else if(count%VARIANT==0 && count<WALK_MAX_COUNT){
-				setImage(charWalk[count/VARIANT]);
+		}else if(fightAnimate){
+			
+			if(count%VARIANT==0 && count<ATTACK_MAX_COUNT){
+				setImage(charAttack[count/VARIANT]);
 				jumped = false;
 			}
-			if(count<WALK_MAX_COUNT+(VARIANT-1)){
+			if(count<ATTACK_MAX_COUNT+(VARIANT-1)){
 				count++;
 			}else {
-				count = WALK_MIN_COUNT;
+				hitOtherPlayer();
+				fightAnimate=false;
+				count = ATTACK_MIN_COUNT;
 			}
-			fall();
-		}else if(Greenfoot.isKeyDown(facing[1])){
-			setLocation(getX() + faceSpeed[1], getY());
-			if(Greenfoot.isKeyDown(jumpS)){
-				jump(i);
-			}else if(count%VARIANT==0 && count<WALK_MAX_COUNT){
-				setImage(charWalk[count/VARIANT]);
-				jumped = false;
-			}
-			if(count>(WALK_MIN_COUNT)){
-				count--;
-			}else count = WALK_MAX_COUNT;
+		}
+		if(!lostHP && !fightAnimate){
+			if(Greenfoot.isKeyDown(actor[0])){
+				fightAnimate = true;
+				count = ATTACK_MIN_COUNT;
+			}else if(Greenfoot.isKeyDown(facing[0])){
+				setLocation(getX() + faceSpeed[0], getY());
+				if(Greenfoot.isKeyDown(jumpS)){
+					jump(i);
+				}else if(count%VARIANT==0 && count<WALK_MAX_COUNT){
+					setImage(charWalk[count/VARIANT]);
+					jumped = false;
+				}
+				if(count<WALK_MAX_COUNT+(VARIANT-1)){
+					count++;
+				}else {
+					count = WALK_MIN_COUNT;
+				}
+				fall();
+			}else if(Greenfoot.isKeyDown(facing[1])){
+				setLocation(getX() + faceSpeed[1], getY());
+				if(Greenfoot.isKeyDown(jumpS)){
+					jump(i);
+				}else if(count%VARIANT==0 && count<WALK_MAX_COUNT){
+					setImage(charWalk[count/VARIANT]);
+					jumped = false;
+				}
+				if(count>(WALK_MIN_COUNT)){
+					count--;
+				}else count = WALK_MAX_COUNT;
 
-			fall();
-		}else {//*/
-			if(Greenfoot.isKeyDown(jumpS)){
-				jump(i);
-			}else if(count%VARIANT==0 && count < STAND_MAX_COUNT){
-				setImage(charStand[count/VARIANT]);
-				jumped = false;
+				fall();
+			}else {//*/
+				if(Greenfoot.isKeyDown(jumpS)){
+					jump(i);
+				}else if(count%VARIANT==0 && count < STAND_MAX_COUNT){
+					setImage(charStand[count/VARIANT]);
+					jumped = false;
+				}
+				if(count<STAND_MAX_COUNT+(VARIANT-1)){
+					count++;
+				}else {
+					count = STAND_MIN_COUNT;
+				}
+				fall();
 			}
-			if(count<STAND_MAX_COUNT+(VARIANT-1)){
-				count++;
-			}else {
-				count = STAND_MIN_COUNT;
-			}
-			fall();
 		}
 	}
 	public void fall(){
@@ -377,11 +385,11 @@ public abstract class Player extends Actor implements Player_Status{
 		List<Player> otherPlayer = getIntersectingObjects(Player.class);
 		for (Player otherplayer: otherPlayer) {
 			otherplayer.gotHit(1);
-			otherplayer.setPlayerRecentlyGotHit(true);
+			//otherplayer.setPlayerRecentlyGotHit(true);
 		}
 	}
 	protected abstract void gotHit(int dmg);
-	
+
 	protected void lostMatch(){
 		matchHasntEnded = false;
 		if(face == Face.RIGHT){
@@ -419,12 +427,12 @@ public abstract class Player extends Actor implements Player_Status{
 	@Override
 	public void healthDisplay(int i) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void setHealth(int i) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public int getHealth() {
