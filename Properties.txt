@@ -1,0 +1,6 @@
+Monster 1 Health: 50
+Monster 1 Movement Speed: 50
+Monster 1 Damage: 50
+Monster 2 health: 48
+Monster 2 Movement Speed: 50
+Monster 2 Damage: 71
