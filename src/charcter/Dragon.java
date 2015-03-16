@@ -50,7 +50,11 @@ public class Dragon extends Player implements Player_Status{
 	public void gotHit(int dmg) {
 		playerRecentlyGotHit = false;
 		for(int i = 0; i < dmg;i++){
-			getWorld().removeObject(bars[health-1]);
+			try{
+				getWorld().removeObject(bars[health-1]);
+			}catch (ArrayIndexOutOfBoundsException array){
+				System.out.println("TOO MANY SHOTS");
+			}
 			health --;
 			lostHP = true;
 		}
