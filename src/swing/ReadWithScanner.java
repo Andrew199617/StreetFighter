@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 
-/** Assumes UTF-8 encoding. JDK 7+. */
+
 public class ReadWithScanner {
 	String  [] values = new String[6];
 	static int [] intValues = new int [6];
@@ -34,10 +34,6 @@ public class ReadWithScanner {
       }
     }
   }
-  
-
-  
-  
   protected void processLine(String aLine){
     //use a second Scanner to parse the content of each line 
     Scanner scanner = new Scanner(aLine);
@@ -60,12 +56,12 @@ public class ReadWithScanner {
   private final Path fFilePath;
   private final static Charset ENCODING = StandardCharsets.UTF_8;  
   
-  private static void log(Object aObject){
+/*  private static void log(Object aObject){
   //  System.out.println(String.valueOf(aObject));
   }
   
   private String quote(String aText){
     String QUOTE = "'";
     return QUOTE + aText + QUOTE;
-  }
+  }*/
 } 
