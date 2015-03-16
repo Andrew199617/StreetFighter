@@ -41,10 +41,6 @@ public abstract class Player extends Actor implements Player_Status{
 	public static final int FLOOR = (ScaleOfScreen.HEIGHT.getNum()/2)+ScaleOfScreen.HEIGHT.getNum()/5;
 
 	protected String jumpS;
-	protected String[] stand;
-	protected String[] walk;
-	protected String[] attack;
-	protected String[] range;
 	protected GreenfootImage[] charStand;
 	protected GreenfootImage[] charWalk;
 	protected GreenfootImage[] charAttack;
@@ -95,10 +91,6 @@ public abstract class Player extends Actor implements Player_Status{
 		standLength = stand;
 		walkLength = walk;
 		setCharType(charType);
-		this.attack = new String[attack*2];
-		this.stand = new String[stand*2];
-		this.walk = new String[walk*2];
-		this.range = new String[range*2];
 		charAttack = new GreenfootImage[attack*2];
 		charStand = new GreenfootImage[stand*2];
 		charWalk = new GreenfootImage[walk*2];
@@ -172,6 +164,7 @@ public abstract class Player extends Actor implements Player_Status{
 		if(!lostHP && !fightAnimate && !rangeAnimate){
 			if(Greenfoot.isKeyDown(actor[0])){
 				fightAnimate = true;
+				waitToHitAgainTimer = HOWLONGTOWAITBEFOREATTACKINGAGAIN+1;
 				count = ATTACK_MIN_COUNT;
 			}else if(Greenfoot.isKeyDown(actor[1])){
 				rangeAnimate = true;
@@ -327,18 +320,15 @@ public abstract class Player extends Actor implements Player_Status{
 		switch(charType){
 		case DRAGON:
 			for(int i = 0; i < standLength*2; i++){
-				stand[i] = "image/Dragon_Stand-" + i + ".png";
-				charStand[i] = new GreenfootImage(stand[i]);
+				charStand[i] = new GreenfootImage("image/Dragon_Stand-" + i + ".png");
 				charStand[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
 			for(int i = 0; i < walkLength*2; i++){
-				walk[i] = "image/Dragon_Walk-" + i + ".png";
-				charWalk[i] = new GreenfootImage(walk[i]);
+				charWalk[i] = new GreenfootImage("image/Dragon_Walk-" + i + ".png");
 				charWalk[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
 			for(int i = 0; i < attackLength*2; i++){
-				attack[i] = "image/Dragon_Claw-" + i + ".png";
-				charAttack[i] = new GreenfootImage(attack[i]);
+				charAttack[i] = new GreenfootImage("image/Dragon_Claw-" + i + ".png");
 				charAttack[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
 			for(int i = 0; i < jumpImg.length; i++){
@@ -364,13 +354,11 @@ public abstract class Player extends Actor implements Player_Status{
 			break;
 		case RAPTOR:
 			for(int i = 0; i < standLength*2; i++){
-				stand[i] = "image/Raptor_Stand-" + i + ".png";
-				charStand[i] = new GreenfootImage(stand[i]);
+				charStand[i] = new GreenfootImage("image/Raptor_Stand-" + i + ".png");
 				charStand[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
 			for(int i = 0; i < walkLength*2; i++){
-				walk[i] = "image/Raptor_Walk-" + i + ".png";
-				charWalk[i] = new GreenfootImage(walk[i]);
+				charWalk[i] = new GreenfootImage("image/Raptor_Walk-" + i + ".png");
 				charWalk[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
 			for(int i = 0; i < jumpImg.length; i++){
@@ -390,8 +378,7 @@ public abstract class Player extends Actor implements Player_Status{
 				hitImg[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
 			for(int i = 0; i < attackLength*2; i++){
-				attack[i] = "image/Raptor_Basic-" + i + ".png";
-				charAttack[i] = new GreenfootImage(attack[i]);
+				charAttack[i] = new GreenfootImage("image/Raptor_Basic-" + i + ".png");
 				charAttack[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
 			break;
