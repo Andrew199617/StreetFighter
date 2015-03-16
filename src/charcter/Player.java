@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import enums.ScaleOfScreen;
+import enums.Character;
 import greenfoot.Actor;
 import greenfoot.Greenfoot;
 import greenfoot.GreenfootImage;
@@ -25,6 +26,7 @@ public abstract class Player extends Actor implements Player_Status{
 	protected int standLength;
 	protected int walkLength;
 	protected int attackLength;
+	protected int rangeLength;
 
 	protected static final int VARIANT = 5;
 	protected int STAND_MAX_COUNT;
@@ -33,6 +35,8 @@ public abstract class Player extends Actor implements Player_Status{
 	protected int WALK_MIN_COUNT = 0;
 	protected int ATTACK_MAX_COUNT;
 	protected int ATTACK_MIN_COUNT = 0;
+	protected int RANGE_MAX_COUNT;
+	protected int RANGE_MIN_COUNT;
 
 	public static final int FLOOR = (ScaleOfScreen.HEIGHT.getNum()/2)+ScaleOfScreen.HEIGHT.getNum()/5;
 
@@ -40,16 +44,18 @@ public abstract class Player extends Actor implements Player_Status{
 	protected String[] stand;
 	protected String[] walk;
 	protected String[] attack;
+	protected String[] range;
 	protected GreenfootImage[] charStand;
 	protected GreenfootImage[] charWalk;
 	protected GreenfootImage[] charAttack;
+	protected GreenfootImage[] charRange;
 	protected GreenfootImage[] jumpImg = new GreenfootImage[2];
 	protected GreenfootImage[] winImg = new GreenfootImage[2];
 	protected GreenfootImage[] lostImg = new GreenfootImage[2];
 	protected GreenfootImage[] hitImg = new GreenfootImage[2];
 
 	protected enum Face {RIGHT, LEFT};
-	protected enum Character {DRAGON, RAPTOR};
+	//protected enum Character {DRAGON, RAPTOR};
 	protected enum Play {ONE, TWO};
 	protected Face face;
 	protected Character charType;
@@ -62,14 +68,15 @@ public abstract class Player extends Actor implements Player_Status{
 
 	protected Actor playerTouch;
 
-	String[] facing = new String[2];
-	String[] actor = new String[2];
+	protected String[] facing = new String[2];
+	protected String[] actor = new String[2];
 	int[] faceSpeed = new int[2];
 	protected boolean matchHasntEnded = true;
-	protected boolean playerRecentlyGotHit = false;
+	public boolean playerRecentlyGotHit = false;
 	protected boolean readyHit = true;
-	protected boolean lostHP = false;
+	public boolean lostHP = false;
 	protected boolean fightAnimate = false;
+	protected boolean rangeAnimate = false;
 	protected int hitTimer = 0;
 	private boolean moveRight = false;
 	private boolean moveLeft = false;
@@ -79,22 +86,30 @@ public abstract class Player extends Actor implements Player_Status{
 	private int waitTimer = 0;
 	private int waitToHitAgainTimer = 0;
 
+	protected Projectile shoot;
 
-	Player(int stand, int walk, int attack, String jump, Character charType){
+	Player(int stand, int walk, int attack, int range, String jump, Character charType){
 		jumpS = jump;
+		rangeLength = range;
 		attackLength = attack;
 		standLength = stand;
 		walkLength = walk;
-		this.charType = charType;
-		STAND_MAX_COUNT = VARIANT*(standLength-1);
-		WALK_MAX_COUNT = VARIANT*(walkLength-1);
+		setCharType(charType);
 		this.attack = new String[attack*2];
 		this.stand = new String[stand*2];
 		this.walk = new String[walk*2];
+		this.range = new String[range*2];
 		charAttack = new GreenfootImage[attack*2];
 		charStand = new GreenfootImage[stand*2];
 		charWalk = new GreenfootImage[walk*2];
+		charRange = new GreenfootImage[range*2];
 		populateCharImg(charType);
+	}
+	protected void setCharType(Character charType){
+		this.charType = charType;
+	}
+	protected Character getCharType(){
+		return charType;
 	}
 	protected void facePlayer(){
 		List<Player> players = getObjectsInRange(ScaleOfScreen.WIDTH.getNum(), Player.class);
@@ -125,21 +140,42 @@ public abstract class Player extends Actor implements Player_Status{
 
 			if(count%VARIANT==0 && count<ATTACK_MAX_COUNT){
 				setImage(charAttack[count/VARIANT]);
-				jumped = false;
 			}
 			if(count<ATTACK_MAX_COUNT+(VARIANT-1)){
 				count++;
-			}else {
+			}else{
 				hitOtherPlayer();
 				fightAnimate=false;
 				count = ATTACK_MIN_COUNT;
 				waitToHitAgainTimer = 0;
 			}
+			fall();
+		}else if(rangeAnimate){
+			int properShotCount = 3;
+			jumped = false;
+			if(count%VARIANT==0 && count<RANGE_MAX_COUNT){
+				setImage(charRange[count/VARIANT]);
+				if(count/VARIANT == (RANGE_MIN_COUNT/VARIANT)+properShotCount){
+					shoot = new Projectile(Character.DRAGON, properShotCount);
+					getWorld().addObject(shoot, getX(), getY());
+					shoot.fire();
+				}
+			}
+			if(count<RANGE_MAX_COUNT+(VARIANT-1)){
+				count++;
+			}else{
+				rangeAnimate=false;
+				count = RANGE_MIN_COUNT;
+			}
+			fall();
 		}
-		if(!lostHP && !fightAnimate){
+		if(!lostHP && !fightAnimate && !rangeAnimate){
 			if(Greenfoot.isKeyDown(actor[0])){
 				fightAnimate = true;
 				count = ATTACK_MIN_COUNT;
+			}else if(Greenfoot.isKeyDown(actor[1])){
+				rangeAnimate = true;
+				count = RANGE_MIN_COUNT;
 			}else if(Greenfoot.isKeyDown(facing[0]) || moveRight){
 				setLocation(getX() + faceSpeed[0], getY());
 				if(Greenfoot.isKeyDown(jumpS)|| doAJump){
@@ -194,6 +230,7 @@ public abstract class Player extends Actor implements Player_Status{
 	}
 	public void jump(int i){
 		jumped = true;
+		fightAnimate = false;
 		if(animate<MAX_JUMP && !maxedJump){
 			setLocation(getX(), getY()-JUMP_SPEED);
 			setImage(jumpImg[i]);
@@ -219,6 +256,7 @@ public abstract class Player extends Actor implements Player_Status{
 			facing[0] = "d";
 			facing[1] = "a";
 			actor[0] ="e";
+			actor[1] ="q";
 			switch(f){
 			case LEFT:
 				faceSpeed[0] = back;
@@ -229,6 +267,8 @@ public abstract class Player extends Actor implements Player_Status{
 				STAND_MAX_COUNT = ((standLength*VARIANT)*2)-1;
 				ATTACK_MIN_COUNT = (attackLength*VARIANT);
 				ATTACK_MAX_COUNT = ((attackLength*VARIANT)*2)-1;
+				RANGE_MIN_COUNT = (rangeLength*VARIANT);
+				RANGE_MAX_COUNT = ((rangeLength*VARIANT)*2)-1;
 				face = 1;
 				break;
 			case RIGHT:
@@ -240,14 +280,17 @@ public abstract class Player extends Actor implements Player_Status{
 				STAND_MAX_COUNT = (standLength*VARIANT)-1;
 				ATTACK_MIN_COUNT = 0;
 				ATTACK_MAX_COUNT = (attackLength*VARIANT)-1;
+				RANGE_MIN_COUNT = 0;
+				RANGE_MAX_COUNT = (rangeLength*VARIANT)-1;
 				face = 0;
 				break;
 			}
 			break;
 		case RAPTOR:
-			facing[0] = "left";
-			facing[1] = "right";
-			actor[0] = "shift";
+			facing[0] = "j";
+			facing[1] = "l";
+			actor[0] = "u";
+			actor[1] = "p";
 			switch(f){
 			case LEFT:
 				faceSpeed[0] = -forward;
@@ -256,6 +299,10 @@ public abstract class Player extends Actor implements Player_Status{
 				WALK_MAX_COUNT = (walkLength*VARIANT)-1;
 				STAND_MIN_COUNT = 0;
 				STAND_MAX_COUNT = (standLength*VARIANT)-1;
+				ATTACK_MIN_COUNT = 0;
+				ATTACK_MAX_COUNT = (attackLength*VARIANT)-1;
+				RANGE_MIN_COUNT = 0;
+				RANGE_MAX_COUNT = (rangeLength*VARIANT)-1;
 				face = 0;
 				break;
 			case RIGHT:
@@ -265,6 +312,10 @@ public abstract class Player extends Actor implements Player_Status{
 				WALK_MAX_COUNT = ((walkLength*VARIANT)*2)-1;
 				STAND_MIN_COUNT = (standLength*VARIANT);
 				STAND_MAX_COUNT = ((standLength*VARIANT)*2)-1;
+				ATTACK_MIN_COUNT = (attackLength*VARIANT);
+				ATTACK_MAX_COUNT = ((attackLength*VARIANT)*2)-1;
+				RANGE_MIN_COUNT = (rangeLength*VARIANT);
+				RANGE_MAX_COUNT = ((rangeLength*VARIANT)*2)-1;
 				face = 1;
 				break;
 			}
@@ -306,6 +357,10 @@ public abstract class Player extends Actor implements Player_Status{
 				hitImg[i] = new GreenfootImage("image/Dragon_Hit-" + i + ".png");
 				hitImg[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
+			for(int i = 0; i < rangeLength*2; i++){
+				charRange[i] = new GreenfootImage("image/Dragon_Range-" + i + ".png");
+				charRange[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
+			}
 			break;
 		case RAPTOR:
 			for(int i = 0; i < standLength*2; i++){
@@ -330,9 +385,14 @@ public abstract class Player extends Actor implements Player_Status{
 				lostImg[i] = new GreenfootImage("image/Raptor_Lost-" + i + ".png");
 				lostImg[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
-			for (int i = 0; i < hitImg .length; i++) {
+			for (int i = 0; i < hitImg.length; i++) {
 				hitImg[i] = new GreenfootImage("image/Raptor_Hit-" + i + ".png");
 				hitImg[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
+			}
+			for(int i = 0; i < attackLength*2; i++){
+				attack[i] = "image/Raptor_Basic-" + i + ".png";
+				charAttack[i] = new GreenfootImage(attack[i]);
+				charAttack[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
 			break;
 		}
@@ -432,7 +492,7 @@ public abstract class Player extends Actor implements Player_Status{
 		}
 
 	}
-	protected abstract void gotHit(int dmg);
+	public abstract void gotHit(int dmg);
 
 	protected void lostMatch(){
 		matchHasntEnded = false;
