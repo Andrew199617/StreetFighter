@@ -39,14 +39,14 @@ class SliderTestFrame extends JFrame implements ChangeListener, ActionListener
 {
 	JButton saveButton = new JButton("Save");
 	FileWriter outputStream;
-	JSlider slider1 = new JSlider();
+	JSlider slider1 = new JSlider(1,30,15);
 	JSlider slider2 = new JSlider();
 	JSlider slider3 = new JSlider();
 	JSlider slider4 = new JSlider();
 	JSlider slider5 = new JSlider();
 	JSlider slider6 = new JSlider();
     
-	int monster1Health = 50;
+	int monster1Health = 5;
 	int monster1MovementSpeed = 50;
 	int monster1Damage = 50;
 	int monster2Health = 50;
@@ -77,7 +77,6 @@ class SliderTestFrame extends JFrame implements ChangeListener, ActionListener
 	   
       // add a slider that snaps to ticks depending on the snap to ticks condition.
 
-      slider1 = new JSlider();
       slider1.setPaintTicks(true);
       slider1.setSnapToTicks(false);
       slider1.setMajorTickSpacing(20);
@@ -160,13 +159,14 @@ public void stateChanged(ChangeEvent event)
 @Override
 public void actionPerformed(ActionEvent e) {
 	//SliderTestFrame.dispose();
+	/*
 		System.out.println("Monster 1 Health: " + monster1Health);
 		System.out.println("Monster 1 Movement Speed: " + monster1MovementSpeed);
 		System.out.println("Monster 1 Damage: " + monster1Damage);
 		System.out.println("Monster 2 Health: " + monster2Health);
 		System.out.println("Monster 2 Movement Speed: " + monster2MovementSpeed);
 		System.out.println("Monster 2 Damage: " + monster2Damage);
-		
+		*/
 	FileWriter outputStream = null; //I think this makes the file writer itself.
 	try {
 		outputStream = new FileWriter("Properties.txt");
