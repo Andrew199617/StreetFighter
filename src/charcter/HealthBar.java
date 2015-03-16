@@ -5,11 +5,11 @@ import java.awt.Color;
 import greenfoot.Actor;
 import greenfoot.GreenfootImage;
 
-public class Status extends Actor{
+public class HealthBar extends Actor{
 	
-	GreenfootImage rect;
+	private GreenfootImage rect;
 	
-	public Status(){
+	public HealthBar(){
 		rect = getImage();
 		rect.scale(rect.getWidth(), rect.getHeight()*2);
         setImage(rect);
