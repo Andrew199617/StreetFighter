@@ -26,9 +26,17 @@ public class Projectile extends Actor{
 		populateFireImg(character);
 	}
 	public void act(){
+		removeThis();
 		animate();
+		
+	}
+	private void removeThis(){
 		List<Player> player = getIntersectingObjects(Player.class);
-		if(player != null){
+		if(getX() == 1){
+			getWorld().removeObject(this);
+		}else if(getX() == Stage.WORLD_WIDTH-1){
+			getWorld().removeObject(this);
+		}else if(player != null){
 			for(Player p:player){
 				if(p.getCharType()!= currentChar){
 					p.playerRecentlyGotHit = true;
@@ -36,14 +44,6 @@ public class Projectile extends Actor{
 					getWorld().removeObject(this);
 				}
 			}
-		}
-		removeAtEdge();
-	}
-	private void removeAtEdge(){
-		if(getX() == 1){
-			getWorld().removeObject(this);
-		}else if(getX() == Stage.WORLD_WIDTH-1){
-			getWorld().removeObject(this);
 		}
 	}
 	public void fire(){
