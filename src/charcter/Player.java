@@ -3,6 +3,7 @@ package charcter;
 import interfaces.Player_Status;
 
 import java.util.List;
+import java.util.Random;
 
 import enums.ScaleOfScreen;
 import greenfoot.Actor;
@@ -11,6 +12,7 @@ import greenfoot.GreenfootImage;
 
 public abstract class Player extends Actor implements Player_Status{
 
+	private static final int HOWLONGTOWAITBEFOREATTACKINGAGAIN = 20;
 	protected static final int HIT_DELAY = 40;
 	protected static final int HIT_ANIMATE = 10;
 
@@ -71,6 +73,11 @@ public abstract class Player extends Actor implements Player_Status{
 	protected int hitTimer = 0;
 	private boolean moveRight = false;
 	private boolean moveLeft = false;
+	private boolean doAJump = false;
+	private Random rand = new Random();
+	private boolean wait = false;
+	private int waitTimer = 0;
+	private int waitToHitAgainTimer = 0;
 
 
 	Player(int stand, int walk, int attack, String jump, Character charType){
@@ -114,7 +121,7 @@ public abstract class Player extends Actor implements Player_Status{
 				animate = 0;
 				lostHP = false;
 			}
-		}else if(fightAnimate){
+		}else if(fightAnimate && waitToHitAgainTimer > HOWLONGTOWAITBEFOREATTACKINGAGAIN){
 
 			if(count%VARIANT==0 && count<ATTACK_MAX_COUNT){
 				setImage(charAttack[count/VARIANT]);
@@ -134,7 +141,7 @@ public abstract class Player extends Actor implements Player_Status{
 				count = ATTACK_MIN_COUNT;
 			}else if(Greenfoot.isKeyDown(facing[0]) || moveRight){
 				setLocation(getX() + faceSpeed[0], getY());
-				if(Greenfoot.isKeyDown(jumpS)){
+				if(Greenfoot.isKeyDown(jumpS)|| doAJump){
 					jump(i);
 				}else if(count%VARIANT==0 && count<WALK_MAX_COUNT){
 					setImage(charWalk[count/VARIANT]);
@@ -148,7 +155,7 @@ public abstract class Player extends Actor implements Player_Status{
 				fall();
 			}else if(Greenfoot.isKeyDown(facing[1]) || moveLeft){
 				setLocation(getX() + faceSpeed[1], getY());
-				if(Greenfoot.isKeyDown(jumpS)){
+				if(Greenfoot.isKeyDown(jumpS)|| doAJump){
 					jump(i);
 				}else if(count%VARIANT==0 && count<WALK_MAX_COUNT){
 					setImage(charWalk[count/VARIANT]);
@@ -160,7 +167,7 @@ public abstract class Player extends Actor implements Player_Status{
 
 				fall();
 			}else {//*/
-				if(Greenfoot.isKeyDown(jumpS)){
+				if(Greenfoot.isKeyDown(jumpS) || doAJump ){
 					jump(i);
 				}else if(count%VARIANT==0 && count < STAND_MAX_COUNT){
 					setImage(charStand[count/VARIANT]);
@@ -181,6 +188,7 @@ public abstract class Player extends Actor implements Player_Status{
 		}else if(getY() >= FLOOR && !jumped){
 			animate = 0;
 			maxedJump = false;
+			doAJump = false;
 		}
 	}
 	public void jump(int i){
@@ -337,21 +345,53 @@ public abstract class Player extends Actor implements Player_Status{
 		List<Player> otherPlayer = getObjectsInRange(ScaleOfScreen.WIDTH.getNum(), Player.class);
 		moveRight = false;
 		moveLeft = false;
-		
-		if(closeEnoughToHitOtherPlayer(otherPlayer)){
+		waitTimer ++;
+		waitToHitAgainTimer  ++;
+		int stopSoCPUWontBeAllKnowing = rand.nextInt(30);
+		int ocassionalStop = rand.nextInt(80);
+
+		if(stopSoCPUWontBeAllKnowing == 0 || wait){
+			if(otherPlayerDidRangedAttack(otherPlayer)){
+				//				doAJump = true;
+			}
+		}
+
+		if (ocassionalStop == 0 || wait){
+			waitForOtherPlayerToDoSomething(otherPlayer);
+		}
+
+		else if(closeEnoughToHitOtherPlayer(otherPlayer)){
 			hitOtherPlayer(otherPlayer);
 		}
-		
+
 		else if(notCloseEnoughToHitOtherPlayerOnLeftSide(otherPlayer)){
 			moveTowardsOtherPlayerFromLeft();
 		}
-		
+
 		else if(notCloseEnoughToHitOtherPlayerOnRightSide(otherPlayer)){
 			moveTowardsOtherPlayerFromRight();
 		}
-		
+
+
 	}
-	
+
+	private void waitForOtherPlayerToDoSomething(List<Player> otherPlayer) {
+		if(!wait){
+			wait = true;
+			waitTimer = 0;
+		}
+		else if(closeEnoughToHitOtherPlayer(otherPlayer)){
+			hitOtherPlayer(otherPlayer);
+		}
+		else if(waitTimer == 100){
+			wait = false;
+		}
+
+	}
+	private boolean otherPlayerDidRangedAttack(List<Player> otherPlayer) {
+
+		return true;
+	}
 	private boolean notCloseEnoughToHitOtherPlayerOnRightSide(List<Player> otherPlayer) {
 		boolean result = false;
 		for(Player op: otherPlayer){
@@ -375,20 +415,22 @@ public abstract class Player extends Actor implements Player_Status{
 	private boolean closeEnoughToHitOtherPlayer(List<Player> otherPlayer) {
 		boolean result = false;
 		for(Player op: otherPlayer){
-			result = op.getX() + CHAR_WIDTH/2 >= getX() && op.getX() - CHAR_WIDTH/2 <= getX();
+			result = op.getX() + CHAR_WIDTH/4*3 >= getX() && op.getX() - CHAR_WIDTH/4*3 <= getX();
 		}
 		return result;
 	}
 	protected void hitOtherPlayer(List<Player> otherPlayer) {
 		fightAnimate = true;
 	}
-	
+
 	protected void hitOtherPlayer(){
 		List<Player> otherPlayer = getIntersectingObjects(Player.class);
+
 		for (Player otherplayer: otherPlayer) {
 			otherplayer.gotHit(1);
-			//otherplayer.setPlayerRecentlyGotHit(true);
+			waitToHitAgainTimer = 0;
 		}
+
 	}
 	protected abstract void gotHit(int dmg);
 
