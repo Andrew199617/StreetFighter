@@ -10,10 +10,10 @@ import java.util.Scanner;
 /** Assumes UTF-8 encoding. JDK 7+. */
 public class ReadWithScanner {
 	String  [] values = new String[6];
-	int [] intValues = new int [6];
+	static int [] intValues = new int [6];
 	int position = 0;
 
-  public int giveValues(int i) throws IOException {
+  public static int giveValues(int i) throws IOException {
     ReadWithScanner parser = new ReadWithScanner("Properties.txt");
     parser.processLineByLine();
     int stat = intValues[i];
@@ -29,16 +29,13 @@ public class ReadWithScanner {
         position++;
       }
       for(int i = 0; i<6; i++){
-    	  System.out.println(values[i]);
+    	//  System.out.println(values[i]);
     	  intValues[i] = Integer.parseInt(values[i]);
       }
     }
   }
   
- /* public int giveValues(int i){
-	  int stat = intValues[i];
-	  return stat;
-  }*/
+
   
   
   protected void processLine(String aLine){
@@ -50,7 +47,7 @@ public class ReadWithScanner {
       String name = scanner.next();
       String value = scanner.next();
       String number = value.trim();
-      System.out.println("Name is : " + quote(name.trim()) + ", and Value is : " + quote(value.trim()));
+     // System.out.println("Name is : " + quote(name.trim()) + ", and Value is : " + quote(value.trim()));
       values [position]=number;
       
     }
@@ -64,7 +61,7 @@ public class ReadWithScanner {
   private final static Charset ENCODING = StandardCharsets.UTF_8;  
   
   private static void log(Object aObject){
-    System.out.println(String.valueOf(aObject));
+  //  System.out.println(String.valueOf(aObject));
   }
   
   private String quote(String aText){
