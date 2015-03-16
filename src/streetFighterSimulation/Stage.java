@@ -3,18 +3,19 @@ package streetFighterSimulation;
 import sounds.Music;
 import sounds.SoundClips;
 import charcter.*;
+import enums.Character;
 import enums.ScaleOfScreen;
 import buttons.MapButton;
 import greenfoot.World;
 
 public class Stage extends World {
 
-	private static final int WORLD_WIDTH = ScaleOfScreen.WIDTH.getNum();
-	private static final int WORLD_HEIGHT = ScaleOfScreen.HEIGHT.getNum();
+	public static final int WORLD_WIDTH = ScaleOfScreen.WIDTH.getNum();
+	public static final int WORLD_HEIGHT = ScaleOfScreen.HEIGHT.getNum();
 
 	Player dino = new Dragon();
 	Player raptor = new Raptor();
-	Status stat = new Status();
+	HealthBar stat = new HealthBar();
 	
 	private static final int DRAGON_HEALTH = 25;
 	private static final int RAPTOR_HEALTH = 25;
