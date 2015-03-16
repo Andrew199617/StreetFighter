@@ -133,6 +133,7 @@ public abstract class Player extends Actor implements Player_Status{
 				hitOtherPlayer();
 				fightAnimate=false;
 				count = ATTACK_MIN_COUNT;
+				waitToHitAgainTimer = 0;
 			}
 		}
 		if(!lostHP && !fightAnimate){
@@ -383,7 +384,7 @@ public abstract class Player extends Actor implements Player_Status{
 		else if(closeEnoughToHitOtherPlayer(otherPlayer)){
 			hitOtherPlayer(otherPlayer);
 		}
-		else if(waitTimer == 100){
+		else if(waitTimer == 50){
 			wait = false;
 		}
 
@@ -395,7 +396,7 @@ public abstract class Player extends Actor implements Player_Status{
 	private boolean notCloseEnoughToHitOtherPlayerOnRightSide(List<Player> otherPlayer) {
 		boolean result = false;
 		for(Player op: otherPlayer){
-			result = op.getX() + CHAR_WIDTH/2 <= getX() && face == Face.LEFT;
+			result = op.getX() + CHAR_WIDTH/4*3 <= getX() && face == Face.LEFT;
 		}
 		return result;
 	}
@@ -408,7 +409,7 @@ public abstract class Player extends Actor implements Player_Status{
 	private boolean notCloseEnoughToHitOtherPlayerOnLeftSide(List<Player> otherPlayer) {
 		boolean result = false;
 		for(Player op: otherPlayer){
-			result = op.getX() - CHAR_WIDTH/2 >= getX() && face == Face.RIGHT;
+			result = op.getX() - CHAR_WIDTH/4*3 >= getX() && face == Face.RIGHT;
 		}
 		return result;
 	}
@@ -428,7 +429,6 @@ public abstract class Player extends Actor implements Player_Status{
 
 		for (Player otherplayer: otherPlayer) {
 			otherplayer.gotHit(1);
-			waitToHitAgainTimer = 0;
 		}
 
 	}
