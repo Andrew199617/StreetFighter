@@ -1,4 +1,4 @@
-package swing;
+/*package swing;
 
 import java.io.IOException;
 
@@ -69,3 +69,4 @@ public class testing {
 	}
 
 }
+*/

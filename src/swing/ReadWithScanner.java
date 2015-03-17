@@ -13,16 +13,17 @@ public class ReadWithScanner {
 	static int [] intValues = new int [6];
 	int position = 0;
 
-  public static int giveValues(int i) throws IOException {
+  public static int giveValues(int i) {
     ReadWithScanner parser = new ReadWithScanner("Properties.txt");
     parser.processLineByLine();
     int stat = intValues[i];
 	return stat;
   }
   public ReadWithScanner(String aFileName){
+	  
     fFilePath = Paths.get(aFileName);
   }
-  public final void processLineByLine() throws IOException {
+  public final void processLineByLine() {
     try (Scanner scanner =  new Scanner(fFilePath, ENCODING.name())){
       while (scanner.hasNextLine()){
         processLine(scanner.nextLine());
@@ -32,12 +33,16 @@ public class ReadWithScanner {
     	//  System.out.println(values[i]);
     	  intValues[i] = Integer.parseInt(values[i]);
       }
-    }
+    } catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
   }
   protected void processLine(String aLine){
     //use a second Scanner to parse the content of each line 
     Scanner scanner = new Scanner(aLine);
     scanner.useDelimiter(":");
+ //   new ReadWithScanner
     if (scanner.hasNext()){
       //assumes the line has a certain structure
       String name = scanner.next();
