@@ -78,42 +78,42 @@ class SliderTestFrame extends JFrame implements ChangeListener, ActionListener
 		slider1.setMajorTickSpacing(10);
 		slider1.setPaintLabels(true);
 		slider1.setMinorTickSpacing(2);
-		addSlider(slider1, "Monster 1 Health");
+		addSlider(slider1, "Dragon: Health");
 
 		slider2.setPaintTicks(true);
 		slider2.setSnapToTicks(false);
 		slider2.setMajorTickSpacing(10);
 		slider2.setMinorTickSpacing(5);
 		slider2.setPaintLabels(true);
-		addSlider(slider2, "Monster 1 Movement Speed");
+		addSlider(slider2, "Dragon: Movement Speed");
 
 		slider3.setPaintTicks(true);
 		slider3.setSnapToTicks(false);
 		slider3.setMajorTickSpacing(1);
 		slider3.setMinorTickSpacing(1);
 		slider3.setPaintLabels(true);
-		addSlider(slider3, "Monster 1 Damage");
+		addSlider(slider3, "Dragon: Damage");
 
 		slider4.setPaintTicks(true);
 		slider4.setSnapToTicks(false);
 		slider4.setMajorTickSpacing(10);
 		slider4.setMinorTickSpacing(2);
 		slider4.setPaintLabels(true);
-		addSlider(slider4, "Monster 2 Health");
+		addSlider(slider4, "Raptor: Health");
 
 		slider5.setPaintTicks(true);
 		slider5.setSnapToTicks(false);
 		slider5.setMajorTickSpacing(10);
 		slider5.setMinorTickSpacing(5);
 		slider5.setPaintLabels(true);
-		addSlider(slider5, "Monster 2 Movement Speed");
+		addSlider(slider5, "Raptor: Movement Speed");
 
 		slider6.setPaintTicks(true);
 		slider6.setSnapToTicks(false);
 		slider6.setMajorTickSpacing(1);
 		slider6.setMinorTickSpacing(1);
 		slider6.setPaintLabels(true);
-		addSlider(slider6, "Monster 2 Damage");
+		addSlider(slider6, "Raptor: Damage");
 
 		// add the text field that displays the slider value
 
