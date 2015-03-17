@@ -41,26 +41,25 @@ class SliderTestFrame extends JFrame implements ChangeListener, ActionListener
 	FileWriter outputStream;
 	public int minimum = 0;
 	public int healthMax = 30;
-	public int helthDefault = 30;
+	public int healthDefault = 30;
 	public int movementSpeedMax = 20;
 	public int movementSpeedDefault = 10;
 	public int damageMax = 30;
 	public int damageDefault = 10;
 
-	JSlider slider1 = new JSlider(minimum,helthDefault,healthMax);
+	JSlider slider1 = new JSlider(minimum,healthDefault,healthMax);
 	JSlider slider2 = new JSlider(minimum,movementSpeedMax,movementSpeedDefault);
 	JSlider slider3 = new JSlider(minimum,damageMax,damageDefault);
-	JSlider slider4 = new JSlider(minimum,helthDefault,healthMax);
+	JSlider slider4 = new JSlider(minimum,healthDefault,healthMax);
 	JSlider slider5 = new JSlider(minimum,movementSpeedMax,movementSpeedDefault);
 	JSlider slider6 = new JSlider(minimum,damageMax,damageDefault);
 
-	int monster1Health = 50;
-	int monster1MovementSpeed = 50;
-	int monster1Damage = 50;
-	int monster2Health = 50;
-	int monster2MovementSpeed = 50;
-	int monster2Damage = 50;
-
+	int monster1Health = healthDefault;
+	int monster1MovementSpeed = movementSpeedDefault;
+	int monster1Damage = damageDefault;
+	int monster2Health = healthDefault;
+	int monster2MovementSpeed = movementSpeedDefault;
+	int monster2Damage = damageDefault;
 	public SliderTestFrame()
 	{
 		setTitle("Monster Config");
@@ -155,7 +154,6 @@ class SliderTestFrame extends JFrame implements ChangeListener, ActionListener
 		monster2Damage = slider6.getValue();
 		JSlider source = (JSlider) event.getSource();
 		textField.setText("" + source.getValue());
-
 	}
 
 	@Override
