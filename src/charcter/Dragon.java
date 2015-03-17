@@ -23,7 +23,9 @@ public class Dragon extends Player implements Player_Status{
 		if(matchHasntEnded){
 			facePlayer();
 		}
-		//timeBetweenHits();
+		if(playerRecentlyGotHit){
+			gotHit(dmg);
+		}
 		determineIfMatchHasBeenWon();
 		//fight();
 	}
