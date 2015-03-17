@@ -2,9 +2,12 @@ package charcter;
 
 import interfaces.Player_Status;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
+import swing.ReadWithScanner;
 import enums.ScaleOfScreen;
 import enums.Character;
 import greenfoot.Actor;
@@ -18,7 +21,9 @@ public abstract class Player extends Actor implements Player_Status{
 	protected static final int HIT_DELAY = 40;
 	protected static final int HIT_ANIMATE = 10;
 
-	protected int health = 25;
+	protected int health;
+	protected int dmg;
+	protected int speed;
 	protected int count = 0;
 
 	protected static final int CHAR_WIDTH = 200;
@@ -42,10 +47,6 @@ public abstract class Player extends Actor implements Player_Status{
 	public static final int FLOOR = (ScaleOfScreen.HEIGHT.getNum()/2)+ScaleOfScreen.HEIGHT.getNum()/5;
 
 	protected String jumpS;
-	protected String[] stand;
-	protected String[] walk;
-	protected String[] attack;
-	protected String[] range;
 	protected GreenfootImage[] charStand;
 	protected GreenfootImage[] charWalk;
 	protected GreenfootImage[] charAttack;
@@ -56,8 +57,6 @@ public abstract class Player extends Actor implements Player_Status{
 	protected GreenfootImage[] hitImg = new GreenfootImage[2];
 
 	protected enum Face {RIGHT, LEFT};
-	//protected enum Character {DRAGON, RAPTOR};
-	protected enum Play {ONE, TWO};
 	protected Face face;
 	protected Character charType;
 
@@ -93,25 +92,39 @@ public abstract class Player extends Actor implements Player_Status{
 	private int damageTaken;
 	private int damage_Taken_Timer_To_Know_When_To_Back_Away;
 	private boolean doingRangedAttack = false;
+	protected int properShotCount;
+	protected int shotAnimate;
 
 	Player(int stand, int walk, int attack, int range, String jump, Character charType){
 		jumpS = jump;
+		useSwing(charType);
 		rangeLength = range;
 		attackLength = attack;
 		standLength = stand;
 		walkLength = walk;
 		setCharType(charType);
-		this.attack = new String[attack*2];
-		this.stand = new String[stand*2];
-		this.walk = new String[walk*2];
-		this.range = new String[range*2];
 		charAttack = new GreenfootImage[attack*2];
 		charStand = new GreenfootImage[stand*2];
 		charWalk = new GreenfootImage[walk*2];
 		charRange = new GreenfootImage[range*2];
 		populateCharImg(charType);
 	}
-
+	public void useSwing(Character charType){
+		switch(charType){
+		case DRAGON:
+			health = ReadWithScanner.giveValues(0);
+			speed = ReadWithScanner.giveValues(1);
+			dmg = ReadWithScanner.giveValues(2);
+			break;
+		case RAPTOR:
+			health = ReadWithScanner.giveValues(3);
+			speed = ReadWithScanner.giveValues(4);
+			dmg = ReadWithScanner.giveValues(5);
+			break;
+		}
+		
+	}
+	
 	protected void setCharType(Character charType){
 		this.charType = charType;
 	}
@@ -167,8 +180,8 @@ public abstract class Player extends Actor implements Player_Status{
 			if(count%VARIANT==0 && count<RANGE_MAX_COUNT){
 				setImage(charRange[count/VARIANT]);
 				if(count/VARIANT == (RANGE_MIN_COUNT/VARIANT)+properShotCount){
-					shoot = new Projectile(Character.DRAGON, properShotCount);
-					getWorld().addObject(shoot, getX()+10, getY());
+					shoot = new Projectile(charType, shotAnimate);
+					getWorld().addObject(shoot, getX() + 10, getY()-15);
 					shoot.fire();
 				}
 			}
@@ -264,8 +277,6 @@ public abstract class Player extends Actor implements Player_Status{
 	}
 
 	protected int faceThat(Face f, Character c){
-		int forward = 10;
-		int back = 6;
 		int face = 0;
 		switch(c){
 		case DRAGON:
@@ -273,10 +284,12 @@ public abstract class Player extends Actor implements Player_Status{
 			facing[1] = "a";
 			actor[0] ="e";
 			actor[1] ="q";
+			properShotCount = 3;
+			shotAnimate = 3;
 			switch(f){
 			case LEFT:
-				faceSpeed[0] = back;
-				faceSpeed[1] = -forward;
+				faceSpeed[0] = speed/2;
+				faceSpeed[1] = -speed;
 				WALK_MIN_COUNT = (walkLength*VARIANT);
 				WALK_MAX_COUNT = ((walkLength*VARIANT)*2)-1;
 				STAND_MIN_COUNT = (standLength*VARIANT);
@@ -288,8 +301,8 @@ public abstract class Player extends Actor implements Player_Status{
 				face = 1;
 				break;
 			case RIGHT:
-				faceSpeed[0] = forward;
-				faceSpeed[1] = -back;
+				faceSpeed[0] = speed;
+				faceSpeed[1] = -speed/2;
 				WALK_MIN_COUNT = 0;
 				WALK_MAX_COUNT = (walkLength*VARIANT)-1;
 				STAND_MIN_COUNT = 0;
@@ -306,11 +319,13 @@ public abstract class Player extends Actor implements Player_Status{
 			facing[0] = "j";
 			facing[1] = "l";
 			actor[0] = "u";
-			actor[1] = "p";
+			actor[1] = "o";
+			properShotCount = 3;
+			shotAnimate = 4;
 			switch(f){
 			case LEFT:
-				faceSpeed[0] = -forward;
-				faceSpeed[1] = back;
+				faceSpeed[0] = -speed;
+				faceSpeed[1] = speed/2;
 				WALK_MIN_COUNT = 0;
 				WALK_MAX_COUNT = (walkLength*VARIANT)-1;
 				STAND_MIN_COUNT = 0;
@@ -322,8 +337,8 @@ public abstract class Player extends Actor implements Player_Status{
 				face = 0;
 				break;
 			case RIGHT:
-				faceSpeed[0] = -back;
-				faceSpeed[1] = forward;
+				faceSpeed[0] = -speed/2;
+				faceSpeed[1] = speed;
 				WALK_MIN_COUNT = (walkLength*VARIANT);
 				WALK_MAX_COUNT = ((walkLength*VARIANT)*2)-1;
 				STAND_MIN_COUNT = (standLength*VARIANT);
@@ -344,18 +359,15 @@ public abstract class Player extends Actor implements Player_Status{
 		switch(charType){
 		case DRAGON:
 			for(int i = 0; i < standLength*2; i++){
-				stand[i] = "image/Dragon_Stand-" + i + ".png";
-				charStand[i] = new GreenfootImage(stand[i]);
+				charStand[i] = new GreenfootImage("image/Dragon_Stand-" + i + ".png");
 				charStand[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
 			for(int i = 0; i < walkLength*2; i++){
-				walk[i] = "image/Dragon_Walk-" + i + ".png";
-				charWalk[i] = new GreenfootImage(walk[i]);
+				charWalk[i] = new GreenfootImage("image/Dragon_Walk-" + i + ".png");
 				charWalk[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
 			for(int i = 0; i < attackLength*2; i++){
-				attack[i] = "image/Dragon_Claw-" + i + ".png";
-				charAttack[i] = new GreenfootImage(attack[i]);
+				charAttack[i] = new GreenfootImage("image/Dragon_Claw-" + i + ".png");
 				charAttack[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
 			for(int i = 0; i < jumpImg.length; i++){
@@ -370,7 +382,7 @@ public abstract class Player extends Actor implements Player_Status{
 				lostImg[i] = new GreenfootImage("image/Dragon_Lost-" + i + ".png");
 				lostImg[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
-			for (int i = 0; i < hitImg .length; i++) {
+			for (int i = 0; i < hitImg.length; i++) {
 				hitImg[i] = new GreenfootImage("image/Dragon_Hit-" + i + ".png");
 				hitImg[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
@@ -381,13 +393,11 @@ public abstract class Player extends Actor implements Player_Status{
 			break;
 		case RAPTOR:
 			for(int i = 0; i < standLength*2; i++){
-				stand[i] = "image/Raptor_Stand-" + i + ".png";
-				charStand[i] = new GreenfootImage(stand[i]);
+				charStand[i] = new GreenfootImage("image/Raptor_Stand-" + i + ".png");
 				charStand[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
 			for(int i = 0; i < walkLength*2; i++){
-				walk[i] = "image/Raptor_Walk-" + i + ".png";
-				charWalk[i] = new GreenfootImage(walk[i]);
+				charWalk[i] = new GreenfootImage("image/Raptor_Walk-" + i + ".png");
 				charWalk[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
 			for(int i = 0; i < jumpImg.length; i++){
@@ -407,9 +417,12 @@ public abstract class Player extends Actor implements Player_Status{
 				hitImg[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
 			for(int i = 0; i < attackLength*2; i++){
-				attack[i] = "image/Raptor_Basic-" + i + ".png";
-				charAttack[i] = new GreenfootImage(attack[i]);
+				charAttack[i] = new GreenfootImage("image/Raptor_Basic-" + i + ".png");
 				charAttack[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
+			}
+			for(int i = 0; i < rangeLength*2; i++){
+				charRange[i] = new GreenfootImage("image/Raptor_Range-" + i + ".png");
+				charRange[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
 			break;
 		}
