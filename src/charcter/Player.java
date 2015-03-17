@@ -20,7 +20,9 @@ public abstract class Player extends Actor implements Player_Status{
 	protected static final int HIT_DELAY = 40;
 	protected static final int HIT_ANIMATE = 10;
 
-	protected int health = 25;
+	protected int health;
+	protected int dmg;
+	protected int speed;
 	protected int count = 0;
 
 	protected static final int CHAR_WIDTH = 200;
@@ -54,8 +56,6 @@ public abstract class Player extends Actor implements Player_Status{
 	protected GreenfootImage[] hitImg = new GreenfootImage[2];
 
 	protected enum Face {RIGHT, LEFT};
-	//protected enum Character {DRAGON, RAPTOR};
-	protected enum Play {ONE, TWO};
 	protected Face face;
 	protected Character charType;
 
@@ -84,28 +84,11 @@ public abstract class Player extends Actor implements Player_Status{
 	private boolean wait = false;
 	private int waitTimer = 0;
 	private int waitToHitAgainTimer = 0;
-	
-	
-	public void useSwing(){
-		/*try {
-			int testing = ReadWithScanner.giveValues(0);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-		
-		int testing = ReadWithScanner.giveValues(0);
-		System.out.println(testing);
-	}
-	
-	
-	
-	
-
 	protected Projectile shoot;
 
 	Player(int stand, int walk, int attack, int range, String jump, Character charType){
 		jumpS = jump;
+		useSwing(charType);
 		rangeLength = range;
 		attackLength = attack;
 		standLength = stand;
@@ -116,6 +99,21 @@ public abstract class Player extends Actor implements Player_Status{
 		charWalk = new GreenfootImage[walk*2];
 		charRange = new GreenfootImage[range*2];
 		populateCharImg(charType);
+	}
+	public void useSwing(Character charType){
+		switch(charType){
+		case DRAGON:
+			health = ReadWithScanner.giveValues(0);
+			speed = ReadWithScanner.giveValues(1);
+			dmg = ReadWithScanner.giveValues(2);
+			break;
+		case RAPTOR:
+			health = ReadWithScanner.giveValues(3);
+			speed = ReadWithScanner.giveValues(4);
+			dmg = ReadWithScanner.giveValues(5);
+			break;
+		}
+		
 	}
 	protected void setCharType(Character charType){
 		this.charType = charType;
@@ -261,8 +259,6 @@ public abstract class Player extends Actor implements Player_Status{
 
 	}
 	protected int faceThat(Face f, Character c){
-		int forward = 10;
-		int back = 6;
 		int face = 0;
 		switch(c){
 		case DRAGON:
@@ -272,8 +268,8 @@ public abstract class Player extends Actor implements Player_Status{
 			actor[1] ="q";
 			switch(f){
 			case LEFT:
-				faceSpeed[0] = back;
-				faceSpeed[1] = -forward;
+				faceSpeed[0] = speed/2;
+				faceSpeed[1] = -speed;
 				WALK_MIN_COUNT = (walkLength*VARIANT);
 				WALK_MAX_COUNT = ((walkLength*VARIANT)*2)-1;
 				STAND_MIN_COUNT = (standLength*VARIANT);
@@ -285,8 +281,8 @@ public abstract class Player extends Actor implements Player_Status{
 				face = 1;
 				break;
 			case RIGHT:
-				faceSpeed[0] = forward;
-				faceSpeed[1] = -back;
+				faceSpeed[0] = speed;
+				faceSpeed[1] = -speed/2;
 				WALK_MIN_COUNT = 0;
 				WALK_MAX_COUNT = (walkLength*VARIANT)-1;
 				STAND_MIN_COUNT = 0;
@@ -306,8 +302,8 @@ public abstract class Player extends Actor implements Player_Status{
 			actor[1] = "p";
 			switch(f){
 			case LEFT:
-				faceSpeed[0] = -forward;
-				faceSpeed[1] = back;
+				faceSpeed[0] = -speed;
+				faceSpeed[1] = speed/2;
 				WALK_MIN_COUNT = 0;
 				WALK_MAX_COUNT = (walkLength*VARIANT)-1;
 				STAND_MIN_COUNT = 0;
@@ -319,8 +315,8 @@ public abstract class Player extends Actor implements Player_Status{
 				face = 0;
 				break;
 			case RIGHT:
-				faceSpeed[0] = -back;
-				faceSpeed[1] = forward;
+				faceSpeed[0] = -speed/2;
+				faceSpeed[1] = speed;
 				WALK_MIN_COUNT = (walkLength*VARIANT);
 				WALK_MAX_COUNT = ((walkLength*VARIANT)*2)-1;
 				STAND_MIN_COUNT = (standLength*VARIANT);
@@ -495,7 +491,7 @@ public abstract class Player extends Actor implements Player_Status{
 		List<Player> otherPlayer = getIntersectingObjects(Player.class);
 
 		for (Player otherplayer: otherPlayer) {
-			otherplayer.gotHit(1);
+			otherplayer.gotHit(dmg);
 		}
 
 	}
