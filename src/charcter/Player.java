@@ -1,9 +1,6 @@
 package charcter;
 
 import interfaces.Player_Status;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
@@ -99,7 +96,7 @@ public abstract class Player extends Actor implements Player_Status{
 
 	Player(int stand, int walk, int attack, int range, String jump, Character charType){
 		jumpS = jump;
-//		useSwing(charType);
+		useSwing(charType);
 		rangeLength = range;
 		attackLength = attack;
 		standLength = stand;
@@ -132,9 +129,9 @@ public abstract class Player extends Actor implements Player_Status{
 			dmg = ReadWithScanner.giveValues(5);
 			break;
 		}
-		
+
 	}
-	
+
 	protected void setCharType(Character charType){
 		this.charType = charType;
 	}
@@ -155,7 +152,7 @@ public abstract class Player extends Actor implements Player_Status{
 	}
 
 	protected void animatePlayer(int i){
-		
+
 		if(lostHP){
 			animateGotHit();
 		}
@@ -165,9 +162,9 @@ public abstract class Player extends Actor implements Player_Status{
 		else if(rangeAnimate && waitToHitAgainTimer > HOW_LONG_TO_WAIT_BEFORE_ATTACKING_AGAIN ){
 			animateRangedAttack();
 		}
-		
+
 		else {
-			
+
 			if(Greenfoot.isKeyDown(actor[0])){
 				attack();
 			}
@@ -183,11 +180,11 @@ public abstract class Player extends Actor implements Player_Status{
 			else {
 				animateJump(i);
 			}
-			
+
 		}
 	}
-	
-	
+
+
 	private void animateJump(int i) {
 		if(Greenfoot.isKeyDown(jumpS) || doAJump ){
 			jump(i);
@@ -486,7 +483,7 @@ public abstract class Player extends Actor implements Player_Status{
 		waitToHitAgainTimer  ++;
 		damage_Taken_Timer_To_Know_When_To_Back_Away ++;
 		int stopSoCPUWontBeAllKnowing = rand.nextInt(25);
-		int ocassionalStop = rand.nextInt(80);
+		int ocassionalStop = rand.nextInt(30);
 		int doRangedAttack = rand.nextInt(20);
 
 		if(stopSoCPUWontBeAllKnowing == 0 || wait || tryToJump){
@@ -504,7 +501,7 @@ public abstract class Player extends Actor implements Player_Status{
 			doRangedAtack();
 		}
 
-		else if(tookAlotOfDamage()){
+		else if(tookAlotOfDamage(otherPlayer)){
 			backUp(otherPlayer);
 		}
 
@@ -549,15 +546,16 @@ public abstract class Player extends Actor implements Player_Status{
 
 	protected abstract boolean onLeftSide();
 
-	private boolean tookAlotOfDamage() {
+	private boolean tookAlotOfDamage(List<Player> otherPlayer) {
 		if(damage_Taken_Timer_To_Know_When_To_Back_Away >= HOW_LONG_BEFORE_BACKING_AWAY){
 			damage_Taken_Timer_To_Know_When_To_Back_Away = 0;
 			damageTaken = 0;
 		}
-		if(damageTaken > 3 && damage_Taken_Timer_To_Know_When_To_Back_Away < HOW_LONG_BEFORE_BACKING_AWAY){
-			return true;
+		for(Player op : otherPlayer){
+			if(damageTaken >= op.dmg*3 && damage_Taken_Timer_To_Know_When_To_Back_Away < HOW_LONG_BEFORE_BACKING_AWAY){
+				return true;
+			}
 		}
-
 		return false;
 	}
 
