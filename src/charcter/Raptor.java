@@ -87,8 +87,7 @@ public class Raptor extends Player implements Player_Status{
 	}
 	@Override
 	protected void doRangedAtack() {
-		// TODO Auto-generated method stub
-		
+		rangeAnimate = true;
 	}
 	@Override
 	protected boolean onRightSide() {

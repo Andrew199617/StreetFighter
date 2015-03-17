@@ -31,7 +31,6 @@ public class MainMenuButton extends Button {
 //			Greenfoot.setWorld(new ChooseMaps());
 			break;
 		case "Options":
-//			Greenfoot.setWorld(new ChooseMaps());
 			Swing.swingWindow();
 			break;
 		}
