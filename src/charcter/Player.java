@@ -13,7 +13,8 @@ import greenfoot.GreenfootImage;
 
 public abstract class Player extends Actor implements Player_Status{
 
-	private static final int HOWLONGTOWAITBEFOREATTACKINGAGAIN = 20;
+	private static final int HOW_LONG_BEFORE_BACKING_AWAY = 1200;
+	private static final int HOW_LONG_TO_WAIT_BEFORE_ATTACKING_AGAIN  = 55;
 	protected static final int HIT_DELAY = 40;
 	protected static final int HIT_ANIMATE = 10;
 
@@ -84,9 +85,14 @@ public abstract class Player extends Actor implements Player_Status{
 	private Random rand = new Random();
 	private boolean wait = false;
 	private int waitTimer = 0;
-	private int waitToHitAgainTimer = 0;
+	private int waitToHitAgainTimer = HOW_LONG_TO_WAIT_BEFORE_ATTACKING_AGAIN + 1 ;
 
 	protected Projectile shoot;
+	private boolean tryToJump;
+	private int tryToJumpTimer;
+	private int damageTaken;
+	private int damage_Taken_Timer_To_Know_When_To_Back_Away;
+	private boolean doingRangedAttack = false;
 
 	Player(int stand, int walk, int attack, int range, String jump, Character charType){
 		jumpS = jump;
@@ -105,12 +111,15 @@ public abstract class Player extends Actor implements Player_Status{
 		charRange = new GreenfootImage[range*2];
 		populateCharImg(charType);
 	}
+
 	protected void setCharType(Character charType){
 		this.charType = charType;
 	}
+
 	protected Character getCharType(){
 		return charType;
 	}
+
 	protected void facePlayer(){
 		List<Player> players = getObjectsInRange(ScaleOfScreen.WIDTH.getNum(), Player.class);
 		for(Player p:players){
@@ -121,6 +130,7 @@ public abstract class Player extends Actor implements Player_Status{
 		}
 
 	}
+
 	protected void animatePlayer(int i){
 		if(lostHP){
 			animate++;
@@ -136,7 +146,7 @@ public abstract class Player extends Actor implements Player_Status{
 				animate = 0;
 				lostHP = false;
 			}
-		}else if(fightAnimate && waitToHitAgainTimer > HOWLONGTOWAITBEFOREATTACKINGAGAIN){
+		}else if(fightAnimate && waitToHitAgainTimer > HOW_LONG_TO_WAIT_BEFORE_ATTACKING_AGAIN && !rangeAnimate){
 
 			if(count%VARIANT==0 && count<ATTACK_MAX_COUNT){
 				setImage(charAttack[count/VARIANT]);
@@ -144,20 +154,21 @@ public abstract class Player extends Actor implements Player_Status{
 			if(count<ATTACK_MAX_COUNT+(VARIANT-1)){
 				count++;
 			}else{
-				hitOtherPlayer();
+				hitOtherPlayer(1);
 				fightAnimate=false;
 				count = ATTACK_MIN_COUNT;
 				waitToHitAgainTimer = 0;
 			}
 			fall();
-		}else if(rangeAnimate){
+		}else if(rangeAnimate && waitToHitAgainTimer > HOW_LONG_TO_WAIT_BEFORE_ATTACKING_AGAIN ){
 			int properShotCount = 3;
 			jumped = false;
+			doingRangedAttack = true;
 			if(count%VARIANT==0 && count<RANGE_MAX_COUNT){
 				setImage(charRange[count/VARIANT]);
 				if(count/VARIANT == (RANGE_MIN_COUNT/VARIANT)+properShotCount){
 					shoot = new Projectile(Character.DRAGON, properShotCount);
-					getWorld().addObject(shoot, getX(), getY());
+					getWorld().addObject(shoot, getX()+10, getY());
 					shoot.fire();
 				}
 			}
@@ -166,15 +177,19 @@ public abstract class Player extends Actor implements Player_Status{
 			}else{
 				rangeAnimate=false;
 				count = RANGE_MIN_COUNT;
+				waitToHitAgainTimer = 0;
+				doingRangedAttack = false;
 			}
 			fall();
 		}
 		if(!lostHP && !fightAnimate && !rangeAnimate){
 			if(Greenfoot.isKeyDown(actor[0])){
 				fightAnimate = true;
+				waitToHitAgainTimer = HOW_LONG_TO_WAIT_BEFORE_ATTACKING_AGAIN +1;
 				count = ATTACK_MIN_COUNT;
 			}else if(Greenfoot.isKeyDown(actor[1])){
 				rangeAnimate = true;
+				waitToHitAgainTimer = HOW_LONG_TO_WAIT_BEFORE_ATTACKING_AGAIN +1;
 				count = RANGE_MIN_COUNT;
 			}else if(Greenfoot.isKeyDown(facing[0]) || moveRight){
 				setLocation(getX() + faceSpeed[0], getY());
@@ -225,7 +240,6 @@ public abstract class Player extends Actor implements Player_Status{
 		}else if(getY() >= FLOOR && !jumped){
 			animate = 0;
 			maxedJump = false;
-			doAJump = false;
 		}
 	}
 	public void jump(int i){
@@ -244,9 +258,11 @@ public abstract class Player extends Actor implements Player_Status{
 			animate--;
 		}else {
 			maxedJump = false;
+			doAJump = false;
 		}
 
 	}
+
 	protected int faceThat(Face f, Character c){
 		int forward = 10;
 		int back = 6;
@@ -323,6 +339,7 @@ public abstract class Player extends Actor implements Player_Status{
 		}
 		return face;
 	}
+
 	protected void populateCharImg(Character charType){
 		switch(charType){
 		case DRAGON:
@@ -397,6 +414,7 @@ public abstract class Player extends Actor implements Player_Status{
 			break;
 		}
 	}
+
 	public void setPlayerRecentlyGotHit(boolean playerRecentlyGotHit) {
 		this.playerRecentlyGotHit = playerRecentlyGotHit;
 		readyHit = false;
@@ -408,21 +426,32 @@ public abstract class Player extends Actor implements Player_Status{
 		moveLeft = false;
 		waitTimer ++;
 		waitToHitAgainTimer  ++;
+		damage_Taken_Timer_To_Know_When_To_Back_Away ++;
 		int stopSoCPUWontBeAllKnowing = rand.nextInt(30);
 		int ocassionalStop = rand.nextInt(80);
+		int doRangedAttack = rand.nextInt(30);
 
-		if(stopSoCPUWontBeAllKnowing == 0 || wait){
+		if(stopSoCPUWontBeAllKnowing == 0 || wait || tryToJump){
+			setTimeBeforeplayerWillGetHitByProjectile();
 			if(otherPlayerDidRangedAttack(otherPlayer)){
-				//				doAJump = true;
+				dodgeAttack();
 			}
 		}
 
-		if (ocassionalStop == 0 || wait){
+		if (ocassionalStop == 0 || wait && !doingRangedAttack){
 			waitForOtherPlayerToDoSomething(otherPlayer);
 		}
 
-		else if(closeEnoughToHitOtherPlayer(otherPlayer)){
-			hitOtherPlayer(otherPlayer);
+		else if(doRangedAttack == 0 && notNextToPlayer(otherPlayer) && notInAir() || doingRangedAttack){
+			doRangedAtack();
+		}
+
+		else if(tookAlotOfDamage()){
+			backUpAndTryToDoRangedAttack(otherPlayer);
+		}
+
+		else if(closeEnoughToHitOtherPlayer(otherPlayer) && notInAir()){
+			hitOtherPlayer();
 		}
 
 		else if(notCloseEnoughToHitOtherPlayerOnLeftSide(otherPlayer)){
@@ -436,43 +465,116 @@ public abstract class Player extends Actor implements Player_Status{
 
 	}
 
+	private void backUpAndTryToDoRangedAttack(List<Player> otherPlayer) {
+		int howFarBackToGo = rand.nextInt(250);
+		int howFarbackToGoAndMinimum = (50 + howFarBackToGo);
+		if(onLeftSide()){
+			if(getX() > ScaleOfScreen.WIDTH.getNum() - howFarbackToGoAndMinimum || getX() < howFarbackToGoAndMinimum){
+				damage_Taken_Timer_To_Know_When_To_Back_Away = HOW_LONG_BEFORE_BACKING_AWAY +1;
+			}
+			else {
+				moveLeft = true;
+			}
+		}
+		else if(onRightSide()){
+			if(getX() > ScaleOfScreen.WIDTH.getNum() -howFarbackToGoAndMinimum || getX() < howFarbackToGoAndMinimum){
+				damage_Taken_Timer_To_Know_When_To_Back_Away = HOW_LONG_BEFORE_BACKING_AWAY +1;
+			}
+			else {
+				moveRight = true;
+			}
+		}
+
+	}
+
+	protected abstract boolean onRightSide();
+
+	protected abstract boolean onLeftSide();
+
+	private boolean tookAlotOfDamage() {
+		if(damage_Taken_Timer_To_Know_When_To_Back_Away >= HOW_LONG_BEFORE_BACKING_AWAY){
+			damage_Taken_Timer_To_Know_When_To_Back_Away = 0;
+			damageTaken = 0;
+		}
+		if(damageTaken > 3 && damage_Taken_Timer_To_Know_When_To_Back_Away < HOW_LONG_BEFORE_BACKING_AWAY){
+			return true;
+		}
+
+		return false;
+	}
+
+	protected abstract void doRangedAtack();
+
+	private boolean notNextToPlayer(List<Player> otherPlayer) {
+		boolean result = false;
+		for(Player op: otherPlayer){
+			result = op.getX() + 250 <= getX() || op.getX() - 250 >= getX();
+		}
+		return result;
+	}
+
+	private boolean notInAir() {
+		if(this.getY() < FLOOR - 3){
+			return false;
+		}
+		return true;
+	}
+
+	private void dodgeAttack() {
+		doAJump = true;
+		tryToJump = false;
+		tryToJumpTimer = 0;
+	}
+
+	private void setTimeBeforeplayerWillGetHitByProjectile() {
+		tryToJump = true;
+		tryToJumpTimer ++;
+		if(tryToJumpTimer > 15){
+			tryToJump = false;
+			tryToJumpTimer = 0;
+		}
+	}
+
 	private void waitForOtherPlayerToDoSomething(List<Player> otherPlayer) {
 		if(!wait){
 			wait = true;
 			waitTimer = 0;
 		}
-		else if(closeEnoughToHitOtherPlayer(otherPlayer)){
-			hitOtherPlayer(otherPlayer);
-		}
-		else if(waitTimer == 50){
+		else if(waitTimer > 50){
 			wait = false;
 		}
+//		else if(closeEnoughToHitOtherPlayer(otherPlayer) && notInAir()){
+//			hitOtherPlayer();
+//		}
 
 	}
+
 	private boolean otherPlayerDidRangedAttack(List<Player> otherPlayer) {
-
-		return true;
-	}
-	private boolean notCloseEnoughToHitOtherPlayerOnRightSide(List<Player> otherPlayer) {
+		@SuppressWarnings("unchecked")
+		List<Projectile> projectiles = getObjectsInRange(250, Projectile.class);
 		boolean result = false;
-		for(Player op: otherPlayer){
-			result = op.getX() + CHAR_WIDTH/4*3 <= getX() && face == Face.LEFT;
+
+		for (Projectile p: projectiles) {
+			if(p.getCurrentChar() != charType){
+				result = true;
+			}
 		}
+
 		return result;
 	}
+
+	protected abstract boolean notCloseEnoughToHitOtherPlayerOnRightSide(List<Player> otherPlayer);
+
 	private void moveTowardsOtherPlayerFromRight() {
 		moveLeft = true;
 	}
+
 	private void moveTowardsOtherPlayerFromLeft() {
 		moveRight = true;	
 	}
-	private boolean notCloseEnoughToHitOtherPlayerOnLeftSide(List<Player> otherPlayer) {
-		boolean result = false;
-		for(Player op: otherPlayer){
-			result = op.getX() - CHAR_WIDTH/4*3 >= getX() && face == Face.RIGHT;
-		}
-		return result;
-	}
+
+	protected abstract boolean notCloseEnoughToHitOtherPlayerOnLeftSide(List<Player> otherPlayer);
+
 	private boolean closeEnoughToHitOtherPlayer(List<Player> otherPlayer) {
 		boolean result = false;
 		for(Player op: otherPlayer){
@@ -480,18 +582,22 @@ public abstract class Player extends Actor implements Player_Status{
 		}
 		return result;
 	}
-	protected void hitOtherPlayer(List<Player> otherPlayer) {
+
+	protected void hitOtherPlayer() {
 		fightAnimate = true;
 	}
 
-	protected void hitOtherPlayer(){
+	protected void hitOtherPlayer(int dmg){
+		@SuppressWarnings("unchecked")
 		List<Player> otherPlayer = getIntersectingObjects(Player.class);
 
 		for (Player otherplayer: otherPlayer) {
-			otherplayer.gotHit(1);
+			otherplayer.gotHit(dmg);
+			otherplayer.damageTaken += dmg;
 		}
 
 	}
+
 	public abstract void gotHit(int dmg);
 
 	protected void lostMatch(){
@@ -503,11 +609,13 @@ public abstract class Player extends Actor implements Player_Status{
 			setImage(lostImg[1]);
 		}
 	}
+
 	protected void determineIfMatchHasBeenWon(){
 		if(enemyHealthIsLessThanZero()){
 			wonMatch();
 		}
 	}
+
 	private boolean enemyHealthIsLessThanZero() {
 		boolean otherPlayersHealthislessThanZero = false;
 		List<Player> otherPlayer = getObjectsInRange(ScaleOfScreen.WIDTH.getNum(),Player.class);
@@ -519,6 +627,7 @@ public abstract class Player extends Actor implements Player_Status{
 		}
 		return otherPlayersHealthislessThanZero;
 	}
+
 	protected void wonMatch(){
 		matchHasntEnded = false;
 		if(face == Face.RIGHT){
