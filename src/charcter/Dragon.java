@@ -1,8 +1,6 @@
 package charcter;
 
 import java.util.List;
-
-import charcter.Player.Face;
 import interfaces.Player_Status;
 import enums.Character;
 
@@ -53,6 +51,7 @@ public class Dragon extends Player implements Player_Status{
 		return health;
 	}
 	public void gotHit(int dmg) {
+		count = 0;
 		playerRecentlyGotHit = false;
 		for(int i = 0; i < dmg;i++){
 			try{

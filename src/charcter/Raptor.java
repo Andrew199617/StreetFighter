@@ -35,6 +35,7 @@ public class Raptor extends Player implements Player_Status{
 		fight();
 	}
 	public void gotHit(int dmg) {
+		count = 0;
 		playerRecentlyGotHit = false;
 		for(int i = 0; i < dmg;i++){
 			try{
