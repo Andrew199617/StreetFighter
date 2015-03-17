@@ -2,6 +2,7 @@ package buttons;
 
 import sounds.Music;
 import streetFighterSimulation.ChooseMaps;
+import swing.Swing;
 import greenfoot.Greenfoot;
 import greenfoot.GreenfootSound;
 

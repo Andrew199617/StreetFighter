@@ -18,7 +18,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 public class Swing
 {
-	public static void main(String[] args)
+	public static void swingWindow()
 	{
 		EventQueue.invokeLater(new Runnable()
 		{
