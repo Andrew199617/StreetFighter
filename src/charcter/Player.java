@@ -85,6 +85,8 @@ public abstract class Player extends Actor implements Player_Status{
 	private int waitTimer = 0;
 	private int waitToHitAgainTimer = 0;
 	protected Projectile shoot;
+	protected int properShotCount;
+	protected int shotAnimate;
 
 	Player(int stand, int walk, int attack, int range, String jump, Character charType){
 		jumpS = jump;
@@ -161,13 +163,13 @@ public abstract class Player extends Actor implements Player_Status{
 			}
 			fall();
 		}else if(rangeAnimate){
-			int properShotCount = 3;
+			
 			jumped = false;
 			if(count%VARIANT==0 && count<RANGE_MAX_COUNT){
 				setImage(charRange[count/VARIANT]);
 				if(count/VARIANT == (RANGE_MIN_COUNT/VARIANT)+properShotCount){
-					shoot = new Projectile(Character.DRAGON, properShotCount);
-					getWorld().addObject(shoot, getX(), getY());
+					shoot = new Projectile(charType, shotAnimate);
+					getWorld().addObject(shoot, getX(), getY()-15);
 					shoot.fire();
 				}
 			}
@@ -266,6 +268,8 @@ public abstract class Player extends Actor implements Player_Status{
 			facing[1] = "a";
 			actor[0] ="e";
 			actor[1] ="q";
+			properShotCount = 3;
+			shotAnimate = 3;
 			switch(f){
 			case LEFT:
 				faceSpeed[0] = speed/2;
@@ -299,7 +303,9 @@ public abstract class Player extends Actor implements Player_Status{
 			facing[0] = "j";
 			facing[1] = "l";
 			actor[0] = "u";
-			actor[1] = "p";
+			actor[1] = "o";
+			properShotCount = 3;
+			shotAnimate = 4;
 			switch(f){
 			case LEFT:
 				faceSpeed[0] = -speed;
@@ -359,7 +365,7 @@ public abstract class Player extends Actor implements Player_Status{
 				lostImg[i] = new GreenfootImage("image/Dragon_Lost-" + i + ".png");
 				lostImg[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
-			for (int i = 0; i < hitImg .length; i++) {
+			for (int i = 0; i < hitImg.length; i++) {
 				hitImg[i] = new GreenfootImage("image/Dragon_Hit-" + i + ".png");
 				hitImg[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
@@ -396,6 +402,10 @@ public abstract class Player extends Actor implements Player_Status{
 			for(int i = 0; i < attackLength*2; i++){
 				charAttack[i] = new GreenfootImage("image/Raptor_Basic-" + i + ".png");
 				charAttack[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
+			}
+			for(int i = 0; i < rangeLength*2; i++){
+				charRange[i] = new GreenfootImage("image/Raptor_Range-" + i + ".png");
+				charRange[i].scale(CHAR_WIDTH, CHAR_HEIGHT);
 			}
 			break;
 		}

@@ -2,6 +2,7 @@ package charcter;
 
 import java.util.List;
 
+import charcter.Player.Face;
 import streetFighterSimulation.Stage;
 import greenfoot.Actor;
 import greenfoot.GreenfootImage;
@@ -10,13 +11,15 @@ import enums.Character;
 public class Projectile extends Actor{
 
 	private GreenfootImage[] shoot;
-	private static final int WIDTH = 100;
+	private static final int WIDTH = 75;
 	private static final int HEIGHT = 50;
 	private int length;
 	private static final int VARIANT = 7;
 	private int MAX_COUNT;
 	private int count = 0;
 	private Character currentChar;
+	private int rotateL = 180;
+	private int rotateR = 0;
 
 	public Projectile(Character character, int length){
 		this.currentChar = character;
@@ -32,9 +35,9 @@ public class Projectile extends Actor{
 	}
 	private void removeThis(){
 		List<Player> player = getIntersectingObjects(Player.class);
-		if(getX() == 1){
+		if(getX() <= 2){
 			getWorld().removeObject(this);
-		}else if(getX() == Stage.WORLD_WIDTH-1){
+		}else if(getX() >= Stage.WORLD_WIDTH-1){
 			getWorld().removeObject(this);
 		}else if(player != null){
 			for(Player p:player){
@@ -47,18 +50,15 @@ public class Projectile extends Actor{
 		}
 	}
 	public void fire(){
-		int rotation, currentX = 0;
-		List<Player> player = getObjectsInRange(Stage.WORLD_WIDTH, Player.class);
+		List<Player> player = getObjectsInRange(Stage.WORLD_WIDTH*2, Player.class);
 		if(player!= null){
 			for(Player p:player){
 				if(p.getCharType() == currentChar){
-					currentX = p.getX();
-				}
-				if(p.getCharType() != currentChar){
-					rotation = (p.getX() > currentX)?
-							0:
-								180;
-					this.setRotation(rotation);
+					if(p.face == Face.LEFT){
+						setRotation(rotateL);
+					}else if(p.face == Face.RIGHT){
+						setRotation(rotateR);
+					}
 				}
 			}
 		}
@@ -78,6 +78,11 @@ public class Projectile extends Actor{
 		if(character == Character.DRAGON){
 			for(int i = 0; i < length; i++){
 				shoot[i] = new GreenfootImage("image/Dragon_Fire-" + i + ".png");
+				shoot[i].scale(WIDTH, HEIGHT);
+			}
+		}else if(character == Character.RAPTOR){
+			for(int i = 0; i < length; i++){
+				shoot[i] = new GreenfootImage("image/Raptor_Fire-" + i + ".png");
 				shoot[i].scale(WIDTH, HEIGHT);
 			}
 		}

@@ -14,7 +14,7 @@ public class Raptor extends Player implements Player_Status{
 	private static final int STAND = 6;
 	private static final int WALK = 8;
 	private static final int ATTACK = 6;
-	private static final int RANGE = 2;
+	private static final int RANGE = 8;
 	private static final String JUMP = "i";
 
 	public Raptor(){
@@ -25,7 +25,7 @@ public class Raptor extends Player implements Player_Status{
 			facePlayer();
 		}
 		if(playerRecentlyGotHit){
-			gotHit(1);
+			gotHit(dmg);
 		}
 		//timeBetweenHits();
 		determineIfMatchHasBeenWon();
