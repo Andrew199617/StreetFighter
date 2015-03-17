@@ -20,10 +20,10 @@ public abstract class Player extends Actor implements Player_Status{
 	protected static final int HIT_DELAY = 40;
 	protected static final int HIT_ANIMATE = 10;
 
-	protected int health = 30;
-	protected int dmg = 1;
-	protected int speed = 10;
-	protected int count = 0;
+	protected int health;
+	protected int dmg ;
+	protected int speed;
+	protected int count;
 
 	protected static final int CHAR_WIDTH = 200;
 	protected static final int CHAR_HEIGHT = 150;
