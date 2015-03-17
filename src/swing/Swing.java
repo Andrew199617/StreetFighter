@@ -25,7 +25,7 @@ public class Swing
 			public void run()
 			{
 				SliderTestFrame frame = new SliderTestFrame();
-				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			//	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.setVisible(true);
 			}
 		});
@@ -44,8 +44,8 @@ class SliderTestFrame extends JFrame implements ChangeListener, ActionListener
 	public int healthDefault = 30;
 	public int movementSpeedMax = 20;
 	public int movementSpeedDefault = 10;
-	public int damageMax = 30;
-	public int damageDefault = 10;
+	public int damageMax = 5;
+	public int damageDefault = 2;
 
 	JSlider slider1 = new JSlider(minimum,healthDefault,healthMax);
 	JSlider slider2 = new JSlider(minimum,movementSpeedMax,movementSpeedDefault);
@@ -89,8 +89,8 @@ class SliderTestFrame extends JFrame implements ChangeListener, ActionListener
 
 		slider3.setPaintTicks(true);
 		slider3.setSnapToTicks(false);
-		slider3.setMajorTickSpacing(10);
-		slider3.setMinorTickSpacing(2);
+		slider3.setMajorTickSpacing(1);
+		slider3.setMinorTickSpacing(1);
 		slider3.setPaintLabels(true);
 		addSlider(slider3, "Monster 1 Damage");
 
@@ -110,8 +110,8 @@ class SliderTestFrame extends JFrame implements ChangeListener, ActionListener
 
 		slider6.setPaintTicks(true);
 		slider6.setSnapToTicks(false);
-		slider6.setMajorTickSpacing(10);
-		slider6.setMinorTickSpacing(2);
+		slider6.setMajorTickSpacing(1);
+		slider6.setMinorTickSpacing(1);
 		slider6.setPaintLabels(true);
 		addSlider(slider6, "Monster 2 Damage");
 

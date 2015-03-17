@@ -1,6 +1,10 @@
 Monster 1 Health: 30
 Monster 1 Movement Speed: 10
+<<<<<<< HEAD
 Monster 1 Damage: 30
+=======
+Monster 1 Damage: 10
+>>>>>>> 3db8eacb9f8ea878cc72ace0c07794d4721cb77f
 Monster 2 health: 30
 Monster 2 Movement Speed: 10
 Monster 2 Damage: 10
