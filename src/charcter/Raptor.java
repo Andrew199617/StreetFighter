@@ -10,7 +10,7 @@ public class Raptor extends Player implements Player_Status{
 	public HealthBar[] bars;
 	private int x = ScaleOfScreen.WIDTH.getNum()-30;
 	private int y = 30;
-	
+
 	private static final int STAND = 6;
 	private static final int WALK = 8;
 	private static final int ATTACK = 6;
@@ -31,16 +31,17 @@ public class Raptor extends Player implements Player_Status{
 		determineIfMatchHasBeenWon();
 	}
 	public void gotHit(int dmg) {
-			playerRecentlyGotHit = false;
-			for(int i = 0; i < dmg;i++){
-				try{
-					getWorld().removeObject(bars[health-1]);
-				}catch (ArrayIndexOutOfBoundsException array){
-					System.out.println("TOO MANY SHOTS");
-				}
+		playerRecentlyGotHit = false;
+		for(int i = 0; i < dmg;i++){
+			try{
+				getWorld().removeObject(bars[health-1]);
 				health --;
 				lostHP = true;
+			}catch (ArrayIndexOutOfBoundsException array){
+				System.out.println("TOO MANY SHOTS");
 			}
+
+		}
 	}
 	@Override
 	public void healthDisplay(int health){ 

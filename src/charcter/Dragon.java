@@ -4,18 +4,18 @@ import interfaces.Player_Status;
 import enums.Character;
 
 public class Dragon extends Player implements Player_Status{
-	
+
 	public HealthBar stat;
 	public HealthBar[] bars;
 	private int x = 30;
 	private int y = 30;
-	
+
 	private static final int STAND = 6;
 	private static final int WALK = 8;
 	private static final int ATTACK = 7;
 	private static final int RANGE = 10;
 	private static final String JUMP = "w";
-	
+
 	public Dragon(){
 		super (STAND, WALK, ATTACK, RANGE, JUMP, Character.DRAGON);
 	}
@@ -52,13 +52,13 @@ public class Dragon extends Player implements Player_Status{
 		for(int i = 0; i < dmg;i++){
 			try{
 				getWorld().removeObject(bars[health-1]);
+				health --;
+				lostHP = true;
 			}catch (ArrayIndexOutOfBoundsException array){
 				System.out.println("TOO MANY SHOTS");
 			}
-			health --;
-			lostHP = true;
 		}
 	}
-	
+
 
 }
