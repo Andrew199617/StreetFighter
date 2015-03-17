@@ -18,18 +18,18 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 public class Swing
 {
-   public static void main(String[] args)
-   {
-      EventQueue.invokeLater(new Runnable()
-         {
-            public void run()
-            {
-               SliderTestFrame frame = new SliderTestFrame();
-               frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-               frame.setVisible(true);
-            }
-         });
-   }
+	public static void main(String[] args)
+	{
+		EventQueue.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				SliderTestFrame frame = new SliderTestFrame();
+				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				frame.setVisible(true);
+			}
+		});
+	}
 }
 
 /**
@@ -39,153 +39,146 @@ class SliderTestFrame extends JFrame implements ChangeListener, ActionListener
 {
 	JButton saveButton = new JButton("Save");
 	FileWriter outputStream;
-	JSlider slider1 = new JSlider(0,30,30);
-	JSlider slider2 = new JSlider(0,20,10);
-	JSlider slider3 = new JSlider(0,30,10);
-	JSlider slider4 = new JSlider(0,30,30);
-	JSlider slider5 = new JSlider(0,20,10);
-	JSlider slider6 = new JSlider(0,30,10);
-    
-	int monster1Health = 5;
-	int monster1MovementSpeed = 50;
-	int monster1Damage = 50;
-	int monster2Health = 50;
-	int monster2MovementSpeed = 50;
-	int monster2Damage = 50;
-	
-   public SliderTestFrame()
-   {
-	   
-	   
-	   
-	   
-	   
-      setTitle("Monster Config");
-      setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+	public int minimum = 0;
+	public int healthMax = 30;
+	public int healthDefault = 30;
+	public int movementSpeedMax = 20;
+	public int movementSpeedDefault = 10;
+	public int damageMax = 30;
+	public int damageDefault = 10;
 
-      sliderPanel = new JPanel();
-      sliderPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+	JSlider slider1 = new JSlider(minimum,healthDefault,healthMax);
+	JSlider slider2 = new JSlider(minimum,movementSpeedMax,movementSpeedDefault);
+	JSlider slider3 = new JSlider(minimum,damageMax,damageDefault);
+	JSlider slider4 = new JSlider(minimum,healthDefault,healthMax);
+	JSlider slider5 = new JSlider(minimum,movementSpeedMax,movementSpeedDefault);
+	JSlider slider6 = new JSlider(minimum,damageMax,damageDefault);
 
-      // add a plain slider
+	int monster1Health = healthDefault;
+	int monster1MovementSpeed = movementSpeedDefault;
+	int monster1Damage = damageDefault;
+	int monster2Health = healthDefault;
+	int monster2MovementSpeed = movementSpeedDefault;
+	int monster2Damage = damageDefault;
+	public SliderTestFrame()
+	{
+		setTitle("Monster Config");
+		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
-      
-      //Save Button
-      ButtonListener listen = new ButtonListener();
-	   saveButton.addActionListener(this);  //Calls the ButtonListener Class.
-	  
-	 //  this.add(saveButton); // I have no idea what this does, but it seems to work without it.
-	   
-      // add a slider that snaps to ticks depending on the snap to ticks condition.
+		sliderPanel = new JPanel();
+		sliderPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-      slider1.setPaintTicks(true);
-      slider1.setSnapToTicks(false);
-      slider1.setMajorTickSpacing(10);
-      slider1.setPaintLabels(true);
-      slider1.setMinorTickSpacing(2);
-      addSlider(slider1, "Monster 1 Health");
-      
-      slider2.setPaintTicks(true);
-      slider2.setSnapToTicks(false);
-      slider2.setMajorTickSpacing(20);
-      slider2.setMinorTickSpacing(5);
-      slider2.setPaintLabels(true);
-      addSlider(slider2, "Monster 1 Movement Speed");
-      
-      slider3.setPaintTicks(true);
-      slider3.setSnapToTicks(false);
-      slider3.setMajorTickSpacing(10);
-      slider3.setMinorTickSpacing(2);
-      slider3.setPaintLabels(true);
-      addSlider(slider3, "Monster 1 Damage");
-      
-      slider4.setPaintTicks(true);
-      slider4.setSnapToTicks(false);
-      slider4.setMajorTickSpacing(10);
-      slider4.setMinorTickSpacing(2);
-      slider4.setPaintLabels(true);
-      addSlider(slider4, "Monster 2 Health");
-      
-      slider5.setPaintTicks(true);
-      slider5.setSnapToTicks(false);
-      slider5.setMajorTickSpacing(20);
-      slider5.setMinorTickSpacing(5);
-      slider5.setPaintLabels(true);
-      addSlider(slider5, "Monster 2 Movement Speed");
-      
-      slider6.setPaintTicks(true);
-      slider6.setSnapToTicks(false);
-      slider6.setMajorTickSpacing(10);
-      slider6.setMinorTickSpacing(2);
-      slider6.setPaintLabels(true);
-      addSlider(slider6, "Monster 2 Damage");
-   
-      // add the text field that displays the slider value
+		//Save Button
+		ButtonListener listen = new ButtonListener();
+		saveButton.addActionListener(this);  //Calls the ButtonListener Class.
 
-      textField = new JTextField();
-      add(sliderPanel, BorderLayout.CENTER);
-      add(textField, BorderLayout.SOUTH);
-   }
+		// add a slider that snaps to ticks depending on the snap to ticks condition.
+		slider1.setPaintTicks(true);
+		slider1.setSnapToTicks(false);
+		slider1.setMajorTickSpacing(10);
+		slider1.setPaintLabels(true);
+		slider1.setMinorTickSpacing(2);
+		addSlider(slider1, "Monster 1 Health");
 
-   /**
-    * Adds a slider to the slider panel and hooks up the listener
-    * @param s the slider
-    * @param description the slider description
-    */
-   public void addSlider(JSlider s, String description)
-   {
-      s.addChangeListener(this); // Common listener for sliders
-      JPanel panel = new JPanel();
-      panel.add(s);
-      panel.add(new JLabel(description));
-      sliderPanel.add(panel);
-      panel.add(saveButton);
-   }
+		slider2.setPaintTicks(true);
+		slider2.setSnapToTicks(false);
+		slider2.setMajorTickSpacing(10);
+		slider2.setMinorTickSpacing(5);
+		slider2.setPaintLabels(true);
+		addSlider(slider2, "Monster 1 Movement Speed");
 
-   public static final int DEFAULT_WIDTH = 430;
-   public static final int DEFAULT_HEIGHT = 450;
+		slider3.setPaintTicks(true);
+		slider3.setSnapToTicks(false);
+		slider3.setMajorTickSpacing(10);
+		slider3.setMinorTickSpacing(2);
+		slider3.setPaintLabels(true);
+		addSlider(slider3, "Monster 1 Damage");
 
-   private JPanel sliderPanel;
-   private JTextField textField;
-@Override
-public void stateChanged(ChangeEvent event)
-{
-   // update text field when the slider value changes
-	monster1Health = slider1.getValue();
-	monster1MovementSpeed = slider2.getValue();
-	monster1Damage = slider3.getValue();
-	monster2Health = slider4.getValue();
-	monster2MovementSpeed = slider5.getValue();
-	monster2Damage = slider6.getValue();
-   JSlider source = (JSlider) event.getSource();
-   textField.setText("" + source.getValue());
-   
-   
-}
+		slider4.setPaintTicks(true);
+		slider4.setSnapToTicks(false);
+		slider4.setMajorTickSpacing(10);
+		slider4.setMinorTickSpacing(2);
+		slider4.setPaintLabels(true);
+		addSlider(slider4, "Monster 2 Health");
 
-@Override
-public void actionPerformed(ActionEvent e) {
-	//SliderTestFrame.dispose();
-	/*
+		slider5.setPaintTicks(true);
+		slider5.setSnapToTicks(false);
+		slider5.setMajorTickSpacing(10);
+		slider5.setMinorTickSpacing(5);
+		slider5.setPaintLabels(true);
+		addSlider(slider5, "Monster 2 Movement Speed");
+
+		slider6.setPaintTicks(true);
+		slider6.setSnapToTicks(false);
+		slider6.setMajorTickSpacing(10);
+		slider6.setMinorTickSpacing(2);
+		slider6.setPaintLabels(true);
+		addSlider(slider6, "Monster 2 Damage");
+
+		// add the text field that displays the slider value
+
+		textField = new JTextField();
+		add(sliderPanel, BorderLayout.CENTER);
+		add(textField, BorderLayout.SOUTH);
+	}
+
+	/**
+	 * Adds a slider to the slider panel and hooks up the listener
+	 * @param s the slider
+	 * @param description the slider description
+	 */
+	public void addSlider(JSlider s, String description)
+	{
+		s.addChangeListener(this); // Common listener for sliders
+		JPanel panel = new JPanel();
+		panel.add(s);
+		panel.add(new JLabel(description));
+		sliderPanel.add(panel);
+		panel.add(saveButton);
+	}
+
+	public static final int DEFAULT_WIDTH = 430;
+	public static final int DEFAULT_HEIGHT = 450;
+
+	private JPanel sliderPanel;
+	private JTextField textField;
+	@Override
+	public void stateChanged(ChangeEvent event)
+	{
+		// update text field when the slider value changes
+		monster1Health = slider1.getValue();
+		monster1MovementSpeed = slider2.getValue();
+		monster1Damage = slider3.getValue();
+		monster2Health = slider4.getValue();
+		monster2MovementSpeed = slider5.getValue();
+		monster2Damage = slider6.getValue();
+		JSlider source = (JSlider) event.getSource();
+		textField.setText("" + source.getValue());
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		//SliderTestFrame.dispose();
+		/*
 		System.out.println("Monster 1 Health: " + monster1Health);
 		System.out.println("Monster 1 Movement Speed: " + monster1MovementSpeed);
 		System.out.println("Monster 1 Damage: " + monster1Damage);
 		System.out.println("Monster 2 Health: " + monster2Health);
 		System.out.println("Monster 2 Movement Speed: " + monster2MovementSpeed);
 		System.out.println("Monster 2 Damage: " + monster2Damage);
-		*/
-	FileWriter outputStream = null; //I think this makes the file writer itself.
-	try {
-		outputStream = new FileWriter("Properties.txt");
-		outputStream.write("Monster 1 Health: " + monster1Health + "\n");
-		outputStream.write("Monster 1 Movement Speed: " + monster1MovementSpeed + "\n");
-		outputStream.write("Monster 1 Damage: " + monster1Damage + "\n");
-		outputStream.write("Monster 2 health: " + monster2Health + "\n");
-		outputStream.write("Monster 2 Movement Speed: " + monster2MovementSpeed + "\n");
-		outputStream.write("Monster 2 Damage: " + monster2Damage + "\n");
-		outputStream.close();
-	} catch (IOException e1) {
-		e1.printStackTrace();
+		 */
+		FileWriter outputStream = null; //I think this makes the file writer itself.
+		try {
+			outputStream = new FileWriter("Properties.txt");
+			outputStream.write("Monster 1 Health: " + monster1Health + "\n");
+			outputStream.write("Monster 1 Movement Speed: " + monster1MovementSpeed + "\n");
+			outputStream.write("Monster 1 Damage: " + monster1Damage + "\n");
+			outputStream.write("Monster 2 health: " + monster2Health + "\n");
+			outputStream.write("Monster 2 Movement Speed: " + monster2MovementSpeed + "\n");
+			outputStream.write("Monster 2 Damage: " + monster2Damage + "\n");
+			outputStream.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 	}
-		
-}
 }
