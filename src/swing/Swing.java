@@ -63,20 +63,12 @@ class SliderTestFrame extends JFrame implements ChangeListener, ActionListener
 	
    public SliderTestFrame()
    {
-	   
-	   
-	   
-	   
-	   
       setTitle("Monster Config");
       setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
       sliderPanel = new JPanel();
       sliderPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-      // add a plain slider
-
-      
       //Save Button
       ButtonListener listen = new ButtonListener();
 	   saveButton.addActionListener(this);  //Calls the ButtonListener Class.
@@ -163,7 +155,6 @@ public void stateChanged(ChangeEvent event)
 	monster2Damage = slider6.getValue();
    JSlider source = (JSlider) event.getSource();
    textField.setText("" + source.getValue());
-   
    
 }
 
