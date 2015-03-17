@@ -86,11 +86,6 @@ public class Raptor extends Player implements Player_Status{
 		return result;
 	}
 	@Override
-	protected void doRangedAtack() {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
 	protected boolean onRightSide() {
 		return  face == Face.RIGHT;
 	}

@@ -45,7 +45,7 @@ public class ReadWithScanner {
  //   new ReadWithScanner
     if (scanner.hasNext()){
       //assumes the line has a certain structure
-    //  String name = scanner.next();
+      String name = scanner.next();
       String value = scanner.next();
       String number = value.trim();
      // System.out.println("Name is : " + quote(name.trim()) + ", and Value is : " + quote(value.trim()));

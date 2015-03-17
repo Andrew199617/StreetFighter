@@ -81,10 +81,7 @@ public class Dragon extends Player implements Player_Status{
 		}
 		return result;
 	}
-	@Override
-	protected void doRangedAtack() {
-		rangeAnimate = true;
-	}
+	
 	@Override
 	protected boolean onRightSide() {
 		return face == Face.LEFT;
