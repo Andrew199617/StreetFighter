@@ -2,6 +2,7 @@ package charcter;
 
 import interfaces.Player_Status;
 
+import java.io.File;
 import java.util.List;
 import java.util.Random;
 
@@ -81,6 +82,8 @@ public abstract class Player extends Actor implements Player_Status{
 	private boolean wait = false;
 	private int waitTimer = 0;
 	private int waitToHitAgainTimer = 0;
+	
+	//File propertiesForPlayer = new File("Properties.txt");
 
 	protected Projectile shoot;
 

@@ -39,12 +39,12 @@ class SliderTestFrame extends JFrame implements ChangeListener, ActionListener
 {
 	JButton saveButton = new JButton("Save");
 	FileWriter outputStream;
-	JSlider slider1 = new JSlider(1,30,15);
-	JSlider slider2 = new JSlider();
-	JSlider slider3 = new JSlider();
-	JSlider slider4 = new JSlider();
-	JSlider slider5 = new JSlider();
-	JSlider slider6 = new JSlider();
+	JSlider slider1 = new JSlider(0,30,30);
+	JSlider slider2 = new JSlider(0,20,10);
+	JSlider slider3 = new JSlider(0,30,10);
+	JSlider slider4 = new JSlider(0,30,30);
+	JSlider slider5 = new JSlider(0,20,10);
+	JSlider slider6 = new JSlider(0,30,10);
     
 	int monster1Health = 5;
 	int monster1MovementSpeed = 50;
@@ -79,38 +79,44 @@ class SliderTestFrame extends JFrame implements ChangeListener, ActionListener
 
       slider1.setPaintTicks(true);
       slider1.setSnapToTicks(false);
-      slider1.setMajorTickSpacing(20);
-      slider1.setMinorTickSpacing(5);
+      slider1.setMajorTickSpacing(10);
+      slider1.setPaintLabels(true);
+      slider1.setMinorTickSpacing(2);
       addSlider(slider1, "Monster 1 Health");
       
       slider2.setPaintTicks(true);
       slider2.setSnapToTicks(false);
       slider2.setMajorTickSpacing(20);
       slider2.setMinorTickSpacing(5);
+      slider2.setPaintLabels(true);
       addSlider(slider2, "Monster 1 Movement Speed");
       
       slider3.setPaintTicks(true);
       slider3.setSnapToTicks(false);
-      slider3.setMajorTickSpacing(20);
-      slider3.setMinorTickSpacing(5);
+      slider3.setMajorTickSpacing(10);
+      slider3.setMinorTickSpacing(2);
+      slider3.setPaintLabels(true);
       addSlider(slider3, "Monster 1 Damage");
       
       slider4.setPaintTicks(true);
       slider4.setSnapToTicks(false);
-      slider4.setMajorTickSpacing(20);
-      slider4.setMinorTickSpacing(5);
+      slider4.setMajorTickSpacing(10);
+      slider4.setMinorTickSpacing(2);
+      slider4.setPaintLabels(true);
       addSlider(slider4, "Monster 2 Health");
       
       slider5.setPaintTicks(true);
       slider5.setSnapToTicks(false);
       slider5.setMajorTickSpacing(20);
       slider5.setMinorTickSpacing(5);
+      slider5.setPaintLabels(true);
       addSlider(slider5, "Monster 2 Movement Speed");
       
       slider6.setPaintTicks(true);
       slider6.setSnapToTicks(false);
-      slider6.setMajorTickSpacing(20);
-      slider6.setMinorTickSpacing(5);
+      slider6.setMajorTickSpacing(10);
+      slider6.setMinorTickSpacing(2);
+      slider6.setPaintLabels(true);
       addSlider(slider6, "Monster 2 Damage");
    
       // add the text field that displays the slider value
