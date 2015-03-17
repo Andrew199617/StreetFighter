@@ -39,6 +39,8 @@ public class Projectile extends Actor{
 	}
 	private void removeThis(){
 		List<Player> player = getIntersectingObjects(Player.class);
+		List<Projectile> projectiles = getIntersectingObjects(Projectile.class);
+
 		if(getX() <= 2){
 			getWorld().removeObject(this);
 		}else if(getX() >= Stage.WORLD_WIDTH-1){
@@ -51,21 +53,28 @@ public class Projectile extends Actor{
 				getWorld().removeObject(this);
 			}
 		}
+		for(Projectile p: projectiles){
+			if(p != null){
+				getWorld().removeObject(p);
+			}
+			getWorld().removeObject(this);
+		}
+
 
 	}
 	public void fire(){
 		List<Player> player = getObjectsInRange(Stage.WORLD_WIDTH*2, Player.class);
-		if(player!= null){
-			for(Player p:player){
-				if(p.getCharType() == currentChar){
-					if(p.face == Face.LEFT){
-						setRotation(rotateL);
-					}else if(p.face == Face.RIGHT){
-						setRotation(rotateR);
-					}
+
+		for(Player p:player){
+			if(p.getCharType() == currentChar){
+				if(p.face == Face.LEFT){
+					setRotation(rotateL);
+				}else if(p.face == Face.RIGHT){
+					setRotation(rotateR);
 				}
 			}
 		}
+
 	}
 	private void animate(){
 		move(12);
