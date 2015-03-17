@@ -1,6 +1,15 @@
+<<<<<<< HEAD
 Monster 1 Health: 20
 Monster 1 Movement Speed: 10
 Monster 1 Damage: 4
 Monster 2 health: 16
 Monster 2 Movement Speed: 10
 Monster 2 Damage: 1
+=======
+Monster 1 Health: 9
+Monster 1 Movement Speed: 20
+Monster 1 Damage: 30
+Monster 2 health: 30
+Monster 2 Movement Speed: 9
+Monster 2 Damage: 12
+>>>>>>> 25da3c16e05fa976e80bf85994ae9017d2ee026f

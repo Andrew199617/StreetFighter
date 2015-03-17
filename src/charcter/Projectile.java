@@ -10,6 +10,10 @@ import enums.Character;
 
 public class Projectile extends Actor{
 
+	public Character getCurrentChar() {
+		return currentChar;
+	}
+
 	private GreenfootImage[] shoot;
 	private static final int WIDTH = 75;
 	private static final int HEIGHT = 50;
@@ -31,7 +35,7 @@ public class Projectile extends Actor{
 	public void act(){
 		removeThis();
 		animate();
-		
+
 	}
 	private void removeThis(){
 		List<Player> player = getIntersectingObjects(Player.class);
@@ -39,15 +43,15 @@ public class Projectile extends Actor{
 			getWorld().removeObject(this);
 		}else if(getX() >= Stage.WORLD_WIDTH-1){
 			getWorld().removeObject(this);
-		}else if(player != null){
-			for(Player p:player){
-				if(p.getCharType()!= currentChar){
-					p.playerRecentlyGotHit = true;
-					p.lostHP = true;
-					getWorld().removeObject(this);
-				}
+		}
+		for(Player p:player){
+			if(p.getCharType()!= currentChar){
+				p.playerRecentlyGotHit = true;
+				p.lostHP = true;
+				getWorld().removeObject(this);
 			}
 		}
+
 	}
 	public void fire(){
 		List<Player> player = getObjectsInRange(Stage.WORLD_WIDTH*2, Player.class);
@@ -64,7 +68,7 @@ public class Projectile extends Actor{
 		}
 	}
 	private void animate(){
-		move(10);
+		move(12);
 		if(count%VARIANT==0 && count<MAX_COUNT){
 			setImage(shoot[count/VARIANT]);
 		}

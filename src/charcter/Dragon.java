@@ -1,5 +1,8 @@
 package charcter;
 
+import java.util.List;
+
+import charcter.Player.Face;
 import interfaces.Player_Status;
 import enums.Character;
 
@@ -27,7 +30,7 @@ public class Dragon extends Player implements Player_Status{
 			gotHit(dmg);
 		}
 		determineIfMatchHasBeenWon();
-		//fight();
+		fight();
 	}
 	@Override
 	public void healthDisplay(int health){
@@ -61,6 +64,34 @@ public class Dragon extends Player implements Player_Status{
 			}
 		}
 	}
-
+	@Override
+	protected boolean notCloseEnoughToHitOtherPlayerOnRightSide(List<Player> otherPlayer) {
+		boolean result = false;
+		for(Player op: otherPlayer){
+			result = op.getX() + CHAR_WIDTH/4*3 <= getX() && face == Face.LEFT;
+		}
+		return result;
+	}
+	@Override
+	protected boolean notCloseEnoughToHitOtherPlayerOnLeftSide(
+			List<Player> otherPlayer) {
+		boolean result = false;
+		for(Player op: otherPlayer){
+			result = op.getX() - CHAR_WIDTH/4*3 >= getX() && face == Face.RIGHT;
+		}
+		return result;
+	}
+	@Override
+	protected void doRangedAtack() {
+		rangeAnimate = true;
+	}
+	@Override
+	protected boolean onRightSide() {
+		return face == Face.LEFT;
+	}
+	@Override
+	protected boolean onLeftSide() {
+		return face == Face.RIGHT;
+	}
 
 }
