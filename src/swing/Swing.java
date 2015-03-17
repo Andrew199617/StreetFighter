@@ -25,7 +25,7 @@ public class Swing
 			public void run()
 			{
 				SliderTestFrame frame = new SliderTestFrame();
-				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			//	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.setVisible(true);
 			}
 		});
