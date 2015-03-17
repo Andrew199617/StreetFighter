@@ -39,12 +39,20 @@ class SliderTestFrame extends JFrame implements ChangeListener, ActionListener
 {
 	JButton saveButton = new JButton("Save");
 	FileWriter outputStream;
-	JSlider slider1 = new JSlider(0,30,30);
-	JSlider slider2 = new JSlider(0,20,10);
-	JSlider slider3 = new JSlider(0,30,10);
-	JSlider slider4 = new JSlider(0,30,30);
-	JSlider slider5 = new JSlider(0,20,10);
-	JSlider slider6 = new JSlider(0,30,10);
+	public int minimum = 0;
+	public int healthMax = 30;
+	public int helthDefault = 30;
+	public int movementSpeedMax = 20;
+	public int movementSpeedDefault = 10;
+	public int damageMax = 30;
+	public int damageDefault = 10;
+	
+	JSlider slider1 = new JSlider(minimum,helthDefault,healthMax);
+	JSlider slider2 = new JSlider(minimum,movementSpeedMax,movementSpeedDefault);
+	JSlider slider3 = new JSlider(minimum,damageMax,damageDefault);
+	JSlider slider4 = new JSlider(minimum,helthDefault,healthMax);
+	JSlider slider5 = new JSlider(minimum,movementSpeedMax,movementSpeedDefault);
+	JSlider slider6 = new JSlider(minimum,damageMax,damageDefault);
     
 	int monster1Health = 5;
 	int monster1MovementSpeed = 50;
@@ -73,10 +81,7 @@ class SliderTestFrame extends JFrame implements ChangeListener, ActionListener
       ButtonListener listen = new ButtonListener();
 	   saveButton.addActionListener(this);  //Calls the ButtonListener Class.
 	  
-	 //  this.add(saveButton); // I have no idea what this does, but it seems to work without it.
-	   
       // add a slider that snaps to ticks depending on the snap to ticks condition.
-
       slider1.setPaintTicks(true);
       slider1.setSnapToTicks(false);
       slider1.setMajorTickSpacing(10);
@@ -86,7 +91,7 @@ class SliderTestFrame extends JFrame implements ChangeListener, ActionListener
       
       slider2.setPaintTicks(true);
       slider2.setSnapToTicks(false);
-      slider2.setMajorTickSpacing(20);
+      slider2.setMajorTickSpacing(10);
       slider2.setMinorTickSpacing(5);
       slider2.setPaintLabels(true);
       addSlider(slider2, "Monster 1 Movement Speed");
@@ -107,7 +112,7 @@ class SliderTestFrame extends JFrame implements ChangeListener, ActionListener
       
       slider5.setPaintTicks(true);
       slider5.setSnapToTicks(false);
-      slider5.setMajorTickSpacing(20);
+      slider5.setMajorTickSpacing(10);
       slider5.setMinorTickSpacing(5);
       slider5.setPaintLabels(true);
       addSlider(slider5, "Monster 2 Movement Speed");
