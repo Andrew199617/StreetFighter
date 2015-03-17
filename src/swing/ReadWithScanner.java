@@ -59,10 +59,8 @@ public class ReadWithScanner {
   
   // PRIVATE 
   private final Path fFilePath;
-  private final static Charset ENCODING = StandardCharsets.UTF_8; 
+  private final static Charset ENCODING = StandardCharsets.UTF_8;  
   
-  
-  //The following code if for if we cared about the name of the values. In this case, we don't.
 /*  private static void log(Object aObject){
   //  System.out.println(String.valueOf(aObject));
   }

@@ -7,9 +7,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
+import streetFighterSimulation.Stage;
 import swing.ReadWithScanner;
 import enums.ScaleOfScreen;
 import enums.Character;
+import enums.Maps;
 import greenfoot.Actor;
 import greenfoot.Greenfoot;
 import greenfoot.GreenfootImage;
@@ -44,7 +46,7 @@ public abstract class Player extends Actor implements Player_Status{
 	protected int RANGE_MAX_COUNT;
 	protected int RANGE_MIN_COUNT;
 
-	public static final int FLOOR = (ScaleOfScreen.HEIGHT.getNum()/2)+ScaleOfScreen.HEIGHT.getNum()/5;
+	public static int FLOOR;
 
 	protected String jumpS;
 	protected GreenfootImage[] charStand;
@@ -108,6 +110,14 @@ public abstract class Player extends Actor implements Player_Status{
 		charWalk = new GreenfootImage[walk*2];
 		charRange = new GreenfootImage[range*2];
 		populateCharImg(charType);
+		FLOOR = getFloor(Stage.map);
+	}
+	public int getFloor(Maps m){
+		if(m == Maps.DRAGON){
+			return (ScaleOfScreen.HEIGHT.getNum()/2)+ScaleOfScreen.HEIGHT.getNum()/5;
+		}else {
+			return Stage.WORLD_HEIGHT-(Stage.WORLD_HEIGHT/7);
+		}
 	}
 	public void useSwing(Character charType){
 		switch(charType){
