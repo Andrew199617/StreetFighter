@@ -17,7 +17,7 @@ public class ReadAndWriteFileIO {
 		}
 	}
 	
-/*	public void readFile (){
+	public void readFile (){
 		FileReader reader = null;
 		try {
 			reader = new FileReader("Properties.txt");
@@ -40,7 +40,7 @@ public class ReadAndWriteFileIO {
 		}
 		System.out.println(toStringStringBuilder());
 	}
-*/
+
 	public void writeFile(String s){
 
 		try {
