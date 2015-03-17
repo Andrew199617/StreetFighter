@@ -3,9 +3,11 @@ package charcter;
 import interfaces.Player_Status;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
+import swing.ReadWithScanner;
 import enums.ScaleOfScreen;
 import enums.Character;
 import greenfoot.Actor;
@@ -83,7 +85,22 @@ public abstract class Player extends Actor implements Player_Status{
 	private int waitTimer = 0;
 	private int waitToHitAgainTimer = 0;
 	
-	//File propertiesForPlayer = new File("Properties.txt");
+	
+	public void useSwing(){
+		/*try {
+			int testing = ReadWithScanner.giveValues(0);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		
+		int testing = ReadWithScanner.giveValues(0);
+		System.out.println(testing);
+	}
+	
+	
+	
+	
 
 	protected Projectile shoot;
 
